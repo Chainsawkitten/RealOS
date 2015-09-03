@@ -14,6 +14,8 @@ string availableCommands[NUMAVAILABLECOMMANDS] = {
 };
 
 int main() {
+    FileSystem fileSystem;
+    
     string userCommand, commandArr[MAXCOMMANDS];
     string user = "user@DV1492";    // Change this if you want another user to be displayed
     string currentDir = "/";    // current directory, used for output
@@ -32,14 +34,14 @@ int main() {
 
             case 0: // quit
                 bRun = false;
-                cout << "Exiting\n";
+                cout << "Exiting" << endl;
                 break;
             case 1: // format
                 // Call fileSystem.format()
                 break;
             case 2: // ls
                 cout << "Listing directory" << endl;
-                // Call filesystem.ls()
+                fileSystem.ls();
                 break;
             case 3: // create
 
@@ -74,7 +76,7 @@ int main() {
                 break;
 
             case 12: // cd
-
+                
                 break;
 
             case 13: // pwd
