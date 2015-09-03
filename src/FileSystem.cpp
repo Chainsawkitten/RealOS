@@ -18,7 +18,7 @@ void FileSystem::save(const std::string &saveFile) const{
 	file.close();
 }
 
-void FileSystem::read(const std::string &saveFile) const{
+void FileSystem::read(const std::string &saveFile) {
 	std::ifstream file;
 	char buffer[512];
 	file.open(saveFile, std::ios::in | std::ios::binary);
@@ -26,7 +26,6 @@ void FileSystem::read(const std::string &saveFile) const{
 	for (int i = 0; i < nrOfBlocks; i++){
 		file.read(buffer, 512);
 		std::string temp(buffer);
-		mMemblockDevice.writeBlock(i, temp);
 		mMemblockDevice.writeBlock(i, temp);
 	}
 	file.close();
