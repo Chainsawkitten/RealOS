@@ -1,10 +1,13 @@
 #include "FileSystem.hpp"
+#include <iostream>
+
+using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory(nullptr, "/");
-    root->addDirectory("test");
-    root->addDirectory("test2");
-    root->addDirectory("test3");
+    root->createDirectory("test");
+    Directory* test = root->createDirectory("test2");
+    test->createDirectory("test3");
 }
 
 FileSystem::~FileSystem() {
@@ -12,5 +15,5 @@ FileSystem::~FileSystem() {
 }
 
 void FileSystem::ls() const {
-    root->ls();
+    root->getDirectory("test2/")->ls();
 }

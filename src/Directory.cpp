@@ -9,18 +9,42 @@ Directory::Directory(const Directory* parent, const std::string &name) {
 }
 
 Directory::~Directory() {
-    for (Directory* directory : contents) {
-        delete directory;
+    for (auto directory : contents) {
+        delete directory.second;
     }
 }
 
-void Directory::addDirectory(const string &name) {
-    contents.push_back(new Directory(this, name));
+Directory* Directory::createDirectory(const string &name) {
+    contents[name] = new Directory(this, name);
+    
+    return contents[name];
+}
+
+Directory* Directory::getDirectory(const string &path) {
+    if (path.empty())
+        return this;
+    
+    string dir;
+    string remaining;
+    size_t pos = path.find('/');
+    if (pos == string::npos) {
+        dir = path;
+        remaining = "";
+    } else {
+        dir = path.substr(0, pos);
+        remaining = path.substr(pos + 1);
+    }
+    
+    if (contents.find(dir) != contents.end()) {
+        return contents[dir]->getDirectory(remaining);
+    }
+    
+    return nullptr;
 }
 
 void Directory::ls() const {
-    for (Directory* directory : contents) {
-        cout << directory->toString();
+    for (auto directory : contents) {
+        cout << directory.second->toString();
     }
 }
 

@@ -2,7 +2,7 @@
 #define DIRECTORY_HPP
 
 #include <string>
-#include <vector>
+#include <map>
 
 /// A directory on the harddrive.
 /**
@@ -20,11 +20,19 @@ public:
     /// Destructor.
     ~Directory();
     
-    /// Add a subdirectory to the directory.
+    /// Create a subdirectory in the directory.
     /**
-     * @param name Name of te subdirectory to add.
+     * @param name Name of the subdirectory to create.
+     * @return The created directory
      */
-    void addDirectory(const std::string &name);
+    Directory* createDirectory(const std::string &name);
+    
+    /// Get a subdirectory in the directory.
+    /**
+     * @param path Path to the subdirectory (relative to this directory).
+     * @return The directory or nullptr if it doesn't exist
+     */
+    Directory* getDirectory(const std::string& path);
     
     /// Print the contents of the directory.
     void ls() const;
@@ -39,7 +47,7 @@ private:
     const Directory* parent;
     std::string name;
     
-    std::vector<Directory*> contents;
+    std::map<std::string, Directory*> contents;
 };
 
 #endif // DIRECTORY_HPP
