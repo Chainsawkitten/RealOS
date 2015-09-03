@@ -3,32 +3,83 @@
 
 #include "BlockDevice.hpp"
 
+/// A simulated device containing multiple blocks in memory.
 class MemBlockDevice: public BlockDevice {
 public:
+    /// Create new memory block device.
+    /**
+     * @param nrOfBlocks Number of blocks on the device.
+     */
     MemBlockDevice(int nrOfBlocks = 250);
+    
+    /// Copy-constructor.
+    /**
+     * @param other Other memory block device to copy.
+     */
     MemBlockDevice(const MemBlockDevice &other);
-
+    
+    /// Destructor.
     ~MemBlockDevice();
 
-    /* Operators */
+    /// Assignment operator.
+    /**
+     * @param other Memory block device to assign to.
+     * @return This memory block device
+     */
     MemBlockDevice& operator=(const MemBlockDevice &other);
+    
+    /// Get block.
+    /**
+     * @param index Index of the block in the device.
+     * @return Requested block
+     */
     Block &operator[] (int index) const;
 
-    /* Returns amount of free blocks */
+    /// Get amount of free blocks.
+    /**
+     * @return The amount of free blocks
+     */
     int spaceLeft() const;
 
-    /* Writes a block */
+    /// Write to a block on the device.
+    /**
+     * @param blockNr Number of the block to write to.
+     * @param vec Char-vector to write to the block.
+     * @return 1 on success, -2 on incorrect vector size, -1 on incorrect block number
+     */
     int writeBlock(int blockNr, const std::vector<char> &vec);
+    
+    /// Write to a block on the device.
+    /**
+     * @param blockNr Number of the block to write to.
+     * @param strBlock String to write to the block.
+     * @return 1 on success, -2 on incorrect vector size, -1 on incorrect block number
+     */
     int writeBlock(int blockNr, const std::string &strBlock);
-    int writeBlock(int blockNr, const char cArr[]);     // Use with care, make sure that cArr has at least the same dimension as block
+    
+    /// Write to a block on the device.
+    /**
+     * Use with caution! Make sure that cArr is at least as large as private member block.
+     * @param blockNr Number of the block to write to.
+     * @param cArr Char-array to write to the block.
+     * @return 1 on success, -1 on incorrect block number
+     */
+    int writeBlock(int blockNr, const char cArr[]);
 
-    /* Reads a block */
+    /// Get a copy of a block on the device.
+    /**
+     * @param blockNr Number of the block to read.
+     * @return A copy of the block.
+     */
     Block readBlock(int blockNr) const;
 
-    /* Resets all the blocks */
+    /// Reset the device, clearing all blocks.
     void reset();
 
-    /* Return the size */
+    /// Get size of device in blocks.
+    /**
+     * @return Number of blocks the device contains.
+     */
     int size() const;
 };
 
