@@ -3,6 +3,8 @@
 
 #include "MemBlockDevice.hpp"
 #include "Directory.hpp"
+#include <iostream>
+#include <fstream>
 
 /// The simulated file system.
 class FileSystem {
@@ -47,7 +49,7 @@ public:
     /**
      * @param saveFile Filename.
      */
-    void read(const std::string &saveFile) const;
+    void load(const std::string &saveFile) ;
     
     /// Delete a file.
     /**
