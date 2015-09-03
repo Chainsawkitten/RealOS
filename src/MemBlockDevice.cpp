@@ -35,7 +35,7 @@ Block& MemBlockDevice::operator[](int index) const {
 }
 
 int MemBlockDevice::spaceLeft() const {
-    /* Not yet implemented */
+    /// @todo Implement.
     return 0;
 }
 
