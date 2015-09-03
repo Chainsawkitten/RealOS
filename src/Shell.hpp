@@ -18,14 +18,6 @@ int parseCommandString(const std::string &userCommand, std::string strArr[]);
 */
 int findCommand(std::string &command);
 
-///Splits a filepath into multiple strings
-/**
-@param filePath string of filepath to split.
-@param delim character that delimits strings
-@return vector of strings that was split from filepath
-*/
-std::vector<std::string> split(const std::string &filePath, const char delim = '/');
-
 /// Returns help-string
 /**
 @return returns a string with helpful information

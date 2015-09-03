@@ -14,6 +14,8 @@ string availableCommands[NUMAVAILABLECOMMANDS] = {
 };
 
 int main() {
+    FileSystem fileSystem;
+    
     string userCommand, commandArr[MAXCOMMANDS];
     string user = "user@DV1492";    // Change this if you want another user to be displayed
     string currentDir = "/";    // current directory, used for output
@@ -32,14 +34,14 @@ int main() {
 
             case 0: // quit
                 bRun = false;
-                cout << "Exiting\n";
+                cout << "Exiting" << endl;
                 break;
             case 1: // format
 				fs.format();
                 break;
             case 2: // ls
                 cout << "Listing directory" << endl;
-                // Call filesystem.ls()
+                fileSystem.ls();
                 break;
             case 3: // create
 
@@ -74,7 +76,7 @@ int main() {
                 break;
 
             case 12: // cd
-
+                
                 break;
 
             case 13: // pwd
@@ -115,27 +117,6 @@ int findCommand(string &command) {
         }
     }
     return index;
-}
-
-vector<string> split(const string &filePath, const char delim) {
-    vector<string> output;
-    string cpy = filePath;
-
-    size_t end = cpy.find_last_of(delim);
-    if (cpy.length() > end+1) {
-        output.push_back(cpy.substr(end+1, cpy.length()));
-    }
-
-    while (end != 0 && end!= string::npos) {
-
-        cpy = cpy.substr(0, cpy.find_last_of('/'));
-        //cout << cpy << endl;
-        end = cpy.find_last_of(delim);
-        output.push_back(cpy.substr(end+1, cpy.length()));
-
-    }
-
-    return output;
 }
 
 string help() {
