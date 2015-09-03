@@ -36,6 +36,7 @@ set(HEADERS
         src/BlockDevice.hpp
         src/FileSystem.hpp
         src/MemBlockDevice.hpp
+        src/Shell.hpp
     )
 
 # Target: Shell

@@ -1,3 +1,4 @@
+#include "Shell.hpp"
 #include <iostream>
 #include <sstream>
 #include "FileSystem.hpp"
@@ -11,15 +12,6 @@ string availableCommands[NUMAVAILABLECOMMANDS] = {
     "quit","format","ls","create","cat","save","read",
     "rm","copy","append","rename","mkdir","cd","pwd","help"
 };
-
-/* Takes usercommand from input and returns number of commands, commands are stored in strArr[] */
-int parseCommandString(const string &userCommand, string strArr[]);
-int findCommand(string &command);
-
-/* Splits a filepath into multiple strings */
-std::vector<string> split(const string &filePath, const char delim = '/');
-
-string help();
 
 int main() {
     string userCommand, commandArr[MAXCOMMANDS];
@@ -125,7 +117,7 @@ int findCommand(string &command) {
     return index;
 }
 
-std::vector<string> split(const string &filePath, const char delim) {
+vector<string> split(const string &filePath, const char delim) {
     vector<string> output;
     string cpy = filePath;
 
@@ -134,7 +126,7 @@ std::vector<string> split(const string &filePath, const char delim) {
         output.push_back(cpy.substr(end+1, cpy.length()));
     }
 
-    while (end != 0 && end!= std::string::npos) {
+    while (end != 0 && end!= string::npos) {
 
         cpy = cpy.substr(0, cpy.find_last_of('/'));
         //cout << cpy << endl;
