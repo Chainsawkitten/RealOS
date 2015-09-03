@@ -9,7 +9,7 @@ const int MAXCOMMANDS = 8;
 const int NUMAVAILABLECOMMANDS = 15;
 
 string availableCommands[NUMAVAILABLECOMMANDS] = {
-    "quit","format","ls","create","cat","save","read",
+    "quit","format","ls","create","cat","save","load",
     "rm","copy","append","rename","mkdir","cd","pwd","help"
 };
 
@@ -50,8 +50,8 @@ int main() {
             case 5: // save
 				fs.save(commandArr[1]);
                 break;
-            case 6: // read
-				fs.read(commandArr[1]);
+            case 6: // load
+				fs.load(commandArr[1]);
                 break;
             case 7: // rm
 

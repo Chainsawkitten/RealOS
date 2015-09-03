@@ -45,7 +45,7 @@ public:
     /**
      * @param saveFile Filename.
      */
-    void read(const std::string &saveFile) ;
+    void load(const std::string &saveFile) ;
     
     /// Delete a file.
     /**
