@@ -62,6 +62,7 @@ int Block::writeBlock(const std::string &strBlock) {
     if (strBlock.size() == (unsigned long)this->nrOfElements) {
         for (int i = 0; i < this->nrOfElements; ++i) {
             this->block[i] = strBlock[i];
+			std::cout << i << block[i] << '\n';
         }
         output = 1;
     }

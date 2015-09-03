@@ -9,7 +9,7 @@ const int MAXCOMMANDS = 8;
 const int NUMAVAILABLECOMMANDS = 15;
 
 string availableCommands[NUMAVAILABLECOMMANDS] = {
-    "quit","format","ls","create","cat","save","read",
+    "quit","format","ls","create","cat","save","load",
     "rm","copy","append","rename","mkdir","cd","pwd","help"
 };
 
@@ -17,7 +17,7 @@ int main() {
     string userCommand, commandArr[MAXCOMMANDS];
     string user = "user@DV1492";    // Change this if you want another user to be displayed
     string currentDir = "/";    // current directory, used for output
-
+	FileSystem fs;
     bool bRun = true;
 
     do {
@@ -35,7 +35,7 @@ int main() {
                 cout << "Exiting\n";
                 break;
             case 1: // format
-                // Call fileSystem.format()
+				fs.format();
                 break;
             case 2: // ls
                 cout << "Listing directory" << endl;
@@ -48,10 +48,10 @@ int main() {
 
                 break;
             case 5: // save
-
+				fs.save(commandArr[1]);
                 break;
-            case 6: // read
-
+            case 6: // load
+				fs.load(commandArr[1]);
                 break;
             case 7: // rm
 
