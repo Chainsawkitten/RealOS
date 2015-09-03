@@ -2,6 +2,7 @@
 #define FILESYSTEM_HPP
 
 #include "MemBlockDevice.hpp"
+#include "Directory.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -10,6 +11,9 @@ class FileSystem {
 public:
     /// Create new file system.
     FileSystem();
+    
+    /// Destructor.
+    ~FileSystem();
     
     /// Format the file system.
     void format();
@@ -83,7 +87,7 @@ public:
     
 private:
     MemBlockDevice mMemblockDevice;
-    
+    Directory* root;
 };
 
 #endif // FILESYSTEM_HPP

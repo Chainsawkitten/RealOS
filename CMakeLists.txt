@@ -25,6 +25,7 @@ endfunction()
 set(SRCS
         src/Block.cpp
         src/BlockDevice.cpp
+        src/Directory.cpp
         src/FileSystem.cpp
         src/MemBlockDevice.cpp
         src/Shell.cpp
@@ -34,6 +35,7 @@ set(SRCS
 set(HEADERS
         src/Block.hpp
         src/BlockDevice.hpp
+        src/Directory.hpp
         src/FileSystem.hpp
         src/MemBlockDevice.hpp
         src/Shell.hpp
