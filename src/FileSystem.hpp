@@ -2,6 +2,8 @@
 #define FILESYSTEM_HPP
 
 #include "MemBlockDevice.hpp"
+#include <iostream>
+#include <fstream>
 
 /// The simulated file system.
 class FileSystem {
