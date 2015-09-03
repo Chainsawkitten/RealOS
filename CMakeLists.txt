@@ -29,6 +29,7 @@ set(SRCS
         src/FileSystem.cpp
         src/MemBlockDevice.cpp
         src/Shell.cpp
+	src/File.cpp
     )
 
 # Header files
@@ -39,6 +40,7 @@ set(HEADERS
         src/FileSystem.hpp
         src/MemBlockDevice.hpp
         src/Shell.hpp
+	src/File.hpp
     )
 
 # Target: Shell
