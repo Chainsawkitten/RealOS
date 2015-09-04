@@ -35,6 +35,7 @@ bool Shell::getCommand() {
 			break;
 		case 1: // format
 			fileSystem.format();
+            currentDir = "/";
 			break;
 		case 2: // ls
 			cout << "Listing directory" << endl;
