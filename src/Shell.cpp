@@ -82,7 +82,9 @@ bool Shell::getCommand() {
 				currentDir = "/" + absolutePath(commandArr[1]);
 				if (currentDir[currentDir.length() - 1] != '/')
 					currentDir += "/";
-			}
+			} else {
+                cout << "Directory does not exist." << endl;
+            }
 			break;
 
 		case 13: // pwd
