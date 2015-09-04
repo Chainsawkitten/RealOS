@@ -6,9 +6,6 @@ using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory("/");
-    root->createDirectory("test");
-    Directory* test = root->createDirectory("test2");
-    test->createDirectory("test3");
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
@@ -29,6 +26,8 @@ void FileSystem::ls(const std::string &path) const {
 void FileSystem::format() {
 	mMemblockDevice.reset();
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
+    delete root;
+    root = new Directory("/");
 }
 
 void FileSystem::save(const std::string &saveFile) const{
