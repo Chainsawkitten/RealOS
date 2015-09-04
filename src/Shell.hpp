@@ -5,6 +5,7 @@
 #include <vector>
 #include "FileSystem.hpp"
 
+/// Shell the user can interact with the file system through.
 class Shell {
 public:
     /// Create new shell.

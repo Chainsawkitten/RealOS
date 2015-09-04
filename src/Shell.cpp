@@ -39,12 +39,14 @@ bool Shell::getCommand() {
         case 2: // ls
             cout << "Listing directory" << endl;
             fileSystem.ls();
+            
+            /// @todo ls with specified directory
             break;
         case 3: // create
-
+            /// @todo create
             break;
         case 4: // cat
-
+            /// @todo cat
             break;
         case 5: // save
             fileSystem.save(absolutePath(commandArr[1]));
@@ -53,23 +55,23 @@ bool Shell::getCommand() {
             fileSystem.load(absolutePath(commandArr[1]));
             break;
         case 7: // rm
-
+            /// @todo rm
             break;
 
         case 8: // copy
-
+            /// @todo copy
             break;
 
         case 9: // append
-
+            /// @todo append
             break;
 
         case 10: // rename
-
+            /// @todo rename
             break;
 
         case 11: // mkdir
-
+            /// @todo mkdir
             break;
 
         case 12: // cd
@@ -81,7 +83,7 @@ bool Shell::getCommand() {
             break;
 
         case 13: // pwd
-
+            /// @todo pwd
             break;
 
         case 14: // help
