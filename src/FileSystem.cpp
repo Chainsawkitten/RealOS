@@ -81,11 +81,20 @@ bool FileSystem::enoughBlocksFree(const int nrOfBlocks) const{
 
 
 void FileSystem::cat(std::string &fileName) const{
-	if (root->getFile(fileName) == nullptr){
-		cout << "404: File not found!\n";
+    Directory* directory = root->getDirectory(directoryPart(fileName));
+    if (directory == nullptr) {
+        cout << "File does not exist." << endl;
+        return;
+    }
+    
+    File* file = directory->getFile(filePart(fileName));
+	if (file == nullptr){
+        cout << "File does not exist." << endl;
+        return;
 	}
-	int fileLength = root->getFile(fileName)->getLength();
-	vector<int> tempNrs = root->getFile(fileName)->getBlockNumbers();
+    
+	int fileLength = file->getLength();
+	vector<int> tempNrs = file->getBlockNumbers();
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
 		for (int j = 0; j < fileLength || j < 512; j++){
@@ -99,3 +108,21 @@ bool FileSystem::directoryExists(const string &path) {
     return root->getDirectory(path) != nullptr;
 }
 
+string FileSystem::directoryPart(const string &path) {
+    size_t pos = path.find_last_of('/');
+    if (pos == string::npos)
+        return "";
+    
+    return path.substr(0, pos);
+}
+
+string FileSystem::filePart(const string &path) {
+    size_t pos = path.find_last_of('/');
+    if (pos == string::npos)
+        return path;
+    
+    if (path.length() < pos + 2)
+        return "";
+    
+    return path.substr(pos + 1);
+}
