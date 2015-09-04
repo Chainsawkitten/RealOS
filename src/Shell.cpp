@@ -83,7 +83,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 13: // pwd
-			/// @todo pwd
+			cout << currentDir << endl;
 			break;
 
 		case 14: // help
