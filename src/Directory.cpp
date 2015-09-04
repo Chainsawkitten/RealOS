@@ -3,8 +3,7 @@
 
 using namespace std;
 
-Directory::Directory(const Directory* parent, const std::string &name) {
-    this->parent = parent;
+Directory::Directory(const std::string &name) {
     this->name = name;
 }
 

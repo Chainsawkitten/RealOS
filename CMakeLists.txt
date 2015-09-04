@@ -27,6 +27,7 @@ set(SRCS
         src/BlockDevice.cpp
         src/Directory.cpp
         src/FileSystem.cpp
+        src/main.cpp
         src/MemBlockDevice.cpp
         src/Shell.cpp
 	src/File.cpp

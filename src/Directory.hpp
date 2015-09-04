@@ -12,10 +12,9 @@ class Directory {
 public:
     /// Create new directory.
     /**
-     * @param parent Parent directory.
      * @param name Name of the directory.
      */
-    Directory(const Directory* parent, const std::string &name);
+    Directory(const std::string &name);
     
     /// Destructor.
     ~Directory();
@@ -44,7 +43,6 @@ public:
     std::string toString() const;
     
 private:
-    const Directory* parent;
     std::string name;
     
     std::map<std::string, Directory*> contents;

@@ -13,90 +13,93 @@ string availableCommands[NUMAVAILABLECOMMANDS] = {
     "rm","copy","append","rename","mkdir","cd","pwd","help"
 };
 
-int main() {
-    FileSystem fileSystem;
-    
-    string userCommand, commandArr[MAXCOMMANDS];
-    string user = "user@DV1492";    // Change this if you want another user to be displayed
-    string currentDir = "/";    // current directory, used for output
-    bool bRun = true;
-
-    do {
-        cout << user << ":" << currentDir << "$ ";
-        getline(cin, userCommand);
-
-        int nrOfCommands = parseCommandString(userCommand, commandArr);
-        if (nrOfCommands > 0) {
-
-            int cIndex = findCommand(commandArr[0]);
-            switch(cIndex) {
-
-            case 0: // quit
-                bRun = false;
-                cout << "Exiting" << endl;
-                break;
-            case 1: // format
-				fileSystem.format();
-                break;
-            case 2: // ls
-                cout << "Listing directory" << endl;
-                fileSystem.ls();
-                break;
-            case 3: // create
-
-                break;
-            case 4: // cat
-
-                break;
-            case 5: // save
-				fileSystem.save(commandArr[1]);
-                break;
-            case 6: // load
-				fileSystem.load(commandArr[1]);
-                break;
-            case 7: // rm
-
-                break;
-
-            case 8: // copy
-
-                break;
-
-            case 9: // append
-
-                break;
-
-            case 10: // rename
-
-                break;
-
-            case 11: // mkdir
-
-                break;
-
-            case 12: // cd
-                
-                break;
-
-            case 13: // pwd
-
-                break;
-
-            case 14: // help
-                cout << help() << endl;
-                break;
-
-            default:
-                cout << "Unknown command: " << commandArr[0] << endl;
-
-            }
-        }
-    } while (bRun == true);
-
-    return 0;
+Shell::Shell(const string &user) {
+    this->user = user;
+    currentDir = "/";
 }
 
-int parseCommandString(const string &userCommand, string strArr[]) {
+bool Shell::getCommand() {
+    string userCommand, commandArr[MAXCOMMANDS];
+    
+    cout << user << ":" << currentDir << "$ ";
+    getline(cin, userCommand);
+    
+    int nrOfCommands = parseCommandString(userCommand, commandArr);
+    if (nrOfCommands > 0) {
+        int cIndex = findCommand(commandArr[0]);
+        switch(cIndex) {
+
+        case 0: // quit
+            cout << "Exiting" << endl;
+            return false;
+            break;
+        case 1: // format
+            fileSystem.format();
+            break;
+        case 2: // ls
+            cout << "Listing directory" << endl;
+            fileSystem.ls();
+            
+            /// @todo ls with specified directory
+            break;
+        case 3: // create
+            /// @todo create
+            break;
+        case 4: // cat
+            /// @todo cat
+            break;
+        case 5: // save
+            fileSystem.save(absolutePath(commandArr[1]));
+            break;
+        case 6: // load
+            fileSystem.load(absolutePath(commandArr[1]));
+            break;
+        case 7: // rm
+            /// @todo rm
+            break;
+
+        case 8: // copy
+            /// @todo copy
+            break;
+
+        case 9: // append
+            /// @todo append
+            break;
+
+        case 10: // rename
+            /// @todo rename
+            break;
+
+        case 11: // mkdir
+            /// @todo mkdir
+            break;
+
+        case 12: // cd
+            if (fileSystem.directoryExists(absolutePath(commandArr[1]))) {
+                currentDir = "/" + absolutePath(commandArr[1]);
+                if (currentDir[currentDir.length()-1] != '/')
+                    currentDir += "/";
+            }
+            break;
+
+        case 13: // pwd
+            /// @todo pwd
+            break;
+
+        case 14: // help
+            cout << help() << endl;
+            break;
+
+        default:
+            cout << "Unknown command: " << commandArr[0] << endl;
+
+        }
+    }
+    
+    return true;
+}
+
+int Shell::parseCommandString(const string &userCommand, string strArr[]) {
     stringstream ssin(userCommand);
     int counter = 0;
     while (ssin.good() && counter < MAXCOMMANDS) {
@@ -108,7 +111,8 @@ int parseCommandString(const string &userCommand, string strArr[]) {
     }
     return counter;
 }
-int findCommand(string &command) {
+
+int Shell::findCommand(string &command) {
     int index = -1;
     for (int i = 0; i < NUMAVAILABLECOMMANDS && index == -1; ++i) {
         if (command == availableCommands[i]) {
@@ -118,7 +122,20 @@ int findCommand(string &command) {
     return index;
 }
 
-string help() {
+std::string Shell::absolutePath(const std::string &path) {
+    /// Fix relative path
+    string temp = path;
+    if (path.length() == 0 || temp[0] != '/')
+        temp = currentDir + temp;
+    temp = temp.substr(1);
+    
+    /// @todo Replace ./
+    /// @todo Replace ../
+    
+    return temp;
+}
+
+string Shell::help() {
     string helpStr;
     helpStr += "OSD Disk Tool .oO Help Screen Oo.\n";
     helpStr += "-----------------------------------------------------------------------------------\n" ;

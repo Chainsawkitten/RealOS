@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 FileSystem::FileSystem() {
     root = new Directory(nullptr, "/");
     root->createDirectory("test");
@@ -51,4 +50,8 @@ void FileSystem::load(const std::string &saveFile) {
 		mMemblockDevice.writeBlock(i, buffer);
 	}
 	file.close();
+}
+
+bool FileSystem::directoryExists(const string &path) {
+    return root->getDirectory(path) != nullptr;
 }
