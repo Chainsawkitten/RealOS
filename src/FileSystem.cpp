@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 FileSystem::FileSystem() {
     root = new Directory(nullptr, "/");
     root->createDirectory("test");

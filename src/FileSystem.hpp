@@ -85,7 +85,7 @@ public:
      * @param file Path to the file to set permissions for.
      */
     void chmod(int permission, const std::string &file);
-
+    
 	/// Finds first free block in mMemblockDevice
 	/**
 	* @return the first free blocks number
