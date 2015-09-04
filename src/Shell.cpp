@@ -50,7 +50,7 @@ bool Shell::getCommand() {
 			fileSystem.create(absolutePath(commandArr[1]));
 			break;
 		case 4: // cat
-			/// @todo cat
+			fileSystem.cat(absolutePath(commandArr[1]));
 			break;
 		case 5: // save
 			fileSystem.save(absolutePath(commandArr[1]));
