@@ -57,6 +57,12 @@ public:
 	* @return vector containing the files blocknumbers
 	*/
 	std::vector<int> getBlockNumbers() const;
+
+	/// Set the files blocknumbers
+	/**
+	* @param vector containing blocknumbers
+	*/
+	void setBlockNumbers(std::vector<int> blockNrs);
 private:
 	bool read;
 	bool write;

@@ -13,16 +13,9 @@ File::~File(){
 }
 
 string File::toString() const {
-	string tempstring;
-	tempstring += "FILE: " + this->name + '\n';
-	tempstring += "R:" + this->read + '\n';
-	tempstring += "W:" + this->write + '\n';
-	tempstring += "Length:" + this->length + 'n';
-	tempstring += "BlockNrs: " + '\n';
-	for (int i = 0; i < blockNumbers.size(); i++){
-		tempstring += "B: "+ blockNumbers[i] + '\n';
-	}
-	return tempstring;
+    /// @todo Permissions
+    /// @todo File size
+	return "      " + name + "\n";
 }
 
 string File::getName() const {
@@ -40,4 +33,8 @@ void File::setLength(const int length) {
 
 vector<int> File::getBlockNumbers() const{
 	return this->blockNumbers;
+}
+
+void File::setBlockNumbers(std::vector<int> blockNrs){
+	this->blockNumbers = blockNrs;
 }

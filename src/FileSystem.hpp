@@ -20,9 +20,6 @@ public:
     /// Format the file system.
     void format();
     
-    /// Print the contents of the current directory.
-    void ls() const;
-    
     /// Print the contents of a given directory.
     /**
      * @param path Path to the directory to print.
@@ -34,6 +31,13 @@ public:
      * @param filePath Path to the file to create.
      */
     void create(const std::string &filePath);
+    
+    /// Create a new directory.
+    /**
+     * @param path Path to directory to create.
+     */
+    void mkdir(const std::string &path);
+      
     
     /// Prints the contents of a file.
     /**
