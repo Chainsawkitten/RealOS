@@ -109,47 +109,61 @@ void FileSystem::append(const std::string &source, const std::string &app){
 void FileSystem::appendToFile(File* file, string contents){
 	vector<int> freeBlock = freeBlocks();
 	vector<int> usedBlockNumbers;
-	int BufferPos = 0;		//Keeps track of where we are in the buffer
+	int bufferPos = 0;		//Keeps track of where we are in the buffer
 	int freeBlockPos = 0;	//Keeps track of what free block number we are using
 	int requiredBlocks = 0;	//Keeps track of how many blocks we need to allocate
-	int startPos = 0;		//Keeps track of where in a block we start.
 	char buffer[512];		//Stores what we want to write to the block
 
 	if (file->getBlockNumbers().size() > 1){
 		//The file we are appending to is not a new file.
-		//TODO: Set startPos to last element of the last block.
-		startPos = file->getLength();
 		//Recalculate file length
-		file->setLength(file->getLength() + contents.length());
+		int tempLength = file->getLength() + contents.length();
 		//Calculate how many new blocks we need, if any.
-		requiredBlocks = ceil(contents.length() / 512.f) - file->getBlockNumbers().size();
+		//If four total blocks required and 2 already allocated, required blocks will be 2.
+		requiredBlocks = ceil(tempLength / 512.f) - file->getBlockNumbers().size();
+		if (requiredBlocks > freeBlock.size()){
+			cout << "Not enough free blocks.\n";
+			return;
+		}
+		
+		file->setLength(tempLength);
+
+		//Null out buffer.
+		for (int i = 0; i < 512; i++)
+			buffer[i] = '\0';
+		//read the last block of the file into the buffer
+		//Size will never exceed 512.
+		string tempString = mMemblockDevice.readBlock(file->getBlockNumbers().back()).toString();
+		bufferPos = tempString.length();
+		for (int i = 0; i < tempString.length(); i++){
+			buffer[i] = tempString[i];
+		}
 	} else {
 		file->setLength(contents.length());
 		requiredBlocks = ceil(contents.length() / 512.f);
-	}
-
-	//Check to see if there are enough free blocks.
-	if (requiredBlocks > freeBlock.size()){
-		cout << "Not enough free blocks.\n";
-		return;
+		//Check to see if there are enough free blocks.
+		if (requiredBlocks > freeBlock.size()){
+			cout << "Not enough free blocks.\n";
+			return;
+		}
 	}
 	
-	for (int j = startPos; j < file->getLength(); j++){
-		if (BufferPos > 512) { //If pos is greater than 512, we need to write to next block.
+	for (int j = 0; j < file->getLength(); j++){
+		if (bufferPos > 512) { //If pos is greater than 512, we need to write to next block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
 			//Null out buffer.
 			for (int i = 0; i < 512; i++)
 				buffer[i] = '\0';
-			BufferPos = 0;
+			bufferPos = 0;
 			freeBlockPos++;
 		}
 		
-		buffer[BufferPos] = contents[j];
-		BufferPos++;
+		buffer[bufferPos] = contents[j];
+		bufferPos++;
 		
-		if (BufferPos == contents.length()){	//If we have reached the end of the string and should write the contents to block.
+		if (bufferPos == contents.length()){	//If we have reached the end of the string and should write the contents to block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
