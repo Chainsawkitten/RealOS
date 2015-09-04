@@ -58,7 +58,25 @@ void FileSystem::create(const std::string &filePath){
 	cout << "Enter something to put into the file: \n";
 	string fileContent;
 	cin >> fileContent;
+	int requiredBlocks = ceil(fileContent.length()/512.f);
+	for (int i = 0; i < freeBlockNumbers.size(); i++){
+		if (freeBlockNumbers[i] == true){
+			//mMemblockDevice[i]
+		}
+	}
 	root->getDirectory(filePath);
+}
+
+bool FileSystem::enoughBlocksFree(const int nrOfBlocks) const{
+	int freeBlocks = 0;
+	for (int i = 0; i < freeBlockNumbers.size(); i++){
+		if (freeBlockNumbers[i] == true){
+			freeBlocks++;
+			if (freeBlocks == nrOfBlocks)
+				return true;
+		}
+	}
+	return false;
 }
 
 

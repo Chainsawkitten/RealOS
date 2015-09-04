@@ -100,6 +100,13 @@ public:
      */
     bool directoryExists(const std::string &path);
 
+	/// Checks whether there are enough blocks free
+	/**
+	* @param nrOfBlocks Amount of blocks needed
+	* @return whether there are enough blocks free
+	*/
+	bool FileSystem::enoughBlocksFree(const int nrOfBlocks) const;
+
 private:
     MemBlockDevice mMemblockDevice;
 	std::vector<bool> freeBlockNumbers;
