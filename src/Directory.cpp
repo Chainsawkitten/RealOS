@@ -51,6 +51,10 @@ void Directory::ls() const {
     for (auto directory : directories) {
         cout << directory.second->toString();
     }
+    
+    for (auto file : files) {
+        cout << file.second->toString();
+    }
 }
 
 string Directory::toString() const {
