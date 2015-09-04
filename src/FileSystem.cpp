@@ -16,8 +16,14 @@ FileSystem::~FileSystem() {
     delete root;
 }
 
-void FileSystem::ls() const {
-    root->getDirectory("test2/")->ls();
+void FileSystem::ls(const std::string &path) const {
+    Directory* directory = root->getDirectory(path);
+    if (directory == nullptr) {
+        cout << "Directory does not exist." << endl;
+        return;
+    }
+    
+    directory->ls();
 }
 
 void FileSystem::format() {

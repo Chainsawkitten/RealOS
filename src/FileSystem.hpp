@@ -20,9 +20,6 @@ public:
     /// Format the file system.
     void format();
     
-    /// Print the contents of the current directory.
-    void ls() const;
-    
     /// Print the contents of a given directory.
     /**
      * @param path Path to the directory to print.

@@ -38,9 +38,12 @@ bool Shell::getCommand() {
 			break;
 		case 2: // ls
 			cout << "Listing directory" << endl;
-			fileSystem.ls();
+            
+            if (nrOfCommands < 2)
+                fileSystem.ls(absolutePath(currentDir));
+            else
+                fileSystem.ls(absolutePath(commandArr[1]));
 
-			/// @todo ls with specified directory
 			break;
 		case 3: // create
 			/// @todo create
