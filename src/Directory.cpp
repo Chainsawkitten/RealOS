@@ -23,10 +23,12 @@ Directory* Directory::createDirectory(const string &name) {
     return directories[name];
 }
 
-void Directory::createFile(const File &file){
-	File* tempFile = new File(file);
-	files[tempFile->getName()] = tempFile;
-	return;
+File* Directory::createFile(const std::string &name){
+	File* newFile = new File(name);
+
+	files[name] = newFile;
+
+	return newFile;
 }
 
 Directory* Directory::getDirectory(const string &path) {

@@ -6,6 +6,8 @@ using namespace std;
 File::File(const std::string &name){
 	this->length = 0;
 	this->name = name;
+	this->read = true;
+	this->write = true;
 }
 
 File::~File(){

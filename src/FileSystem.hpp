@@ -77,6 +77,13 @@ public:
      */
     void append(const std::string &source, const std::string &app);
     
+	/// Helper functions that helps the system to create files
+	/**
+	* @param file file to append to.
+	* @param contents contents to write to file.
+	*/
+	void FileSystem::appendToFile(File* file, std::string contents);
+
     /// Rename a file.
     /**
      * @param source Old file path.
@@ -91,11 +98,11 @@ public:
      */
     void chmod(int permission, const std::string &file);
     
-	/// Finds first free block in mMemblockDevice
+	/// Finds unused blocknumbers in freeBlockNumbers
 	/**
-	* @return the first free blocks number
+	* @return a vector of unused blocknumbers
 	*/
-	int findFirstFreeBlock();
+	std::vector<int> freeBlocks() const;
     
     /// Checks whether a given directory exists.
     /**
@@ -103,13 +110,6 @@ public:
      * @return Whether the directory exists
      */
     bool directoryExists(const std::string &path);
-
-	/// Checks whether there are enough blocks free
-	/**
-	* @param nrOfBlocks Amount of blocks needed
-	* @return whether there are enough blocks free
-	*/
-	bool FileSystem::enoughBlocksFree(const int nrOfBlocks) const;
 
 private:
     MemBlockDevice mMemblockDevice;

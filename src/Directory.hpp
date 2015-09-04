@@ -33,7 +33,7 @@ public:
 	* @param name Name of the file to create.
 	* @return The created directory
 	*/
-	void createFile(const File &file);
+	File* createFile(const std::string &name);
 
 	/// Get a file in this directory.
 	/**
