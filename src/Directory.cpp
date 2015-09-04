@@ -11,6 +11,10 @@ Directory::~Directory() {
     for (auto directory : directories) {
         delete directory.second;
     }
+    
+    for (auto file : files) {
+        delete file.second;
+    }
 }
 
 Directory* Directory::createDirectory(const string &name) {
@@ -50,6 +54,10 @@ File* Directory::getFile(const string &name) {
 void Directory::ls() const {
     for (auto directory : directories) {
         cout << directory.second->toString();
+    }
+    
+    for (auto file : files) {
+        cout << file.second->toString();
     }
 }
 

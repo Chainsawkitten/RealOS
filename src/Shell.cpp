@@ -35,12 +35,16 @@ bool Shell::getCommand() {
 			break;
 		case 1: // format
 			fileSystem.format();
+            currentDir = "/";
 			break;
 		case 2: // ls
 			cout << "Listing directory" << endl;
-			fileSystem.ls();
+            
+            if (nrOfCommands < 2)
+                fileSystem.ls(absolutePath(currentDir));
+            else
+                fileSystem.ls(absolutePath(commandArr[1]));
 
-			/// @todo ls with specified directory
 			break;
 		case 3: // create
 			/// @todo create
@@ -71,7 +75,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 11: // mkdir
-			/// @todo mkdir
+			fileSystem.mkdir(absolutePath(commandArr[1]));
 			break;
 
 		case 12: // cd
@@ -79,11 +83,13 @@ bool Shell::getCommand() {
 				currentDir = "/" + absolutePath(commandArr[1]);
 				if (currentDir[currentDir.length() - 1] != '/')
 					currentDir += "/";
-			}
+			} else {
+                cout << "Directory does not exist." << endl;
+            }
 			break;
 
 		case 13: // pwd
-			/// @todo pwd
+			cout << currentDir << endl;
 			break;
 
 		case 14: // help

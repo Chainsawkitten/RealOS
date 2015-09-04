@@ -6,9 +6,6 @@ using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory("/");
-    root->createDirectory("test");
-    Directory* test = root->createDirectory("test2");
-    test->createDirectory("test3");
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
@@ -16,13 +13,21 @@ FileSystem::~FileSystem() {
     delete root;
 }
 
-void FileSystem::ls() const {
-    root->getDirectory("test2/")->ls();
+void FileSystem::ls(const std::string &path) const {
+    Directory* directory = root->getDirectory(path);
+    if (directory == nullptr) {
+        cout << "Directory does not exist." << endl;
+        return;
+    }
+    
+    directory->ls();
 }
 
 void FileSystem::format() {
 	mMemblockDevice.reset();
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
+    delete root;
+    root = new Directory("/");
 }
 
 void FileSystem::save(const std::string &saveFile) const{
@@ -53,7 +58,6 @@ void FileSystem::load(const std::string &saveFile) {
 	file.close();
 }
 
-
 void FileSystem::create(const std::string &filePath){
 	cout << "Enter something to put into the file: \n";
 	string fileContent;
@@ -61,6 +65,32 @@ void FileSystem::create(const std::string &filePath){
 	root->getDirectory(filePath);
 }
 
+void FileSystem::mkdir(const string &path) {
+    if (filePart(path).empty()) {
+        cout << "Wrong syntax." << endl;
+        return;
+    }
+    
+    Directory* directory = root->getDirectory(directoryPart(path));
+    if (directory == nullptr) {
+        cout << "Directory " << directoryPart(path) << " does not exist." << endl;
+        return;
+    }
+    
+    if (directory->getDirectory(filePart(path)) != nullptr) {
+        cout << "Directory with that name already exists." << endl;
+        return;
+    }
+    
+    if (directory->getFile(filePart(path)) != nullptr) {
+        cout << "File with same name already exists." << endl;
+        return;
+    }
+    
+    directory->createDirectory(filePart(path));
+    
+    cout << "Directory created." << endl;
+}
 
 void FileSystem::cat(std::string &fileName) const{
     Directory* directory = root->getDirectory(directoryPart(fileName));
