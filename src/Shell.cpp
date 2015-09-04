@@ -43,7 +43,7 @@ bool Shell::getCommand() {
 			/// @todo ls with specified directory
 			break;
 		case 3: // create
-			/// @todo create
+			fileSystem.create(absolutePath(commandArr[1]));
 			break;
 		case 4: // cat
 			/// @todo cat

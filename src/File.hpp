@@ -46,6 +46,12 @@ public:
 	*/
 	int getLength() const;
 
+	/// Set the files length.
+	/**
+	* @param string containing the files name
+	*/
+	void setLength(const int length);
+
 	/// Get the files blocknumbers
 	/**
 	* @return vector containing the files blocknumbers

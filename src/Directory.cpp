@@ -19,6 +19,12 @@ Directory* Directory::createDirectory(const string &name) {
     return directories[name];
 }
 
+void Directory::createFile(const File &file){
+	File* tempFile = new File(file);
+	files[tempFile->getName()] = tempFile;
+	return;
+}
+
 Directory* Directory::getDirectory(const string &path) {
     if (path.empty())
         return this;

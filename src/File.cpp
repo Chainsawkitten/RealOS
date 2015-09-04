@@ -33,6 +33,11 @@ int File::getLength() const {
 	return this->length;
 }
 
+void File::setLength(const int length) {
+	this->length = length;
+}
+
+
 vector<int> File::getBlockNumbers() const{
 	return this->blockNumbers;
 }
