@@ -74,7 +74,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 11: // mkdir
-			/// @todo mkdir
+			fileSystem.mkdir(absolutePath(commandArr[1]));
 			break;
 
 		case 12: // cd

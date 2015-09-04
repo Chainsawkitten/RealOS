@@ -32,6 +32,13 @@ public:
      */
     void create(const std::string &filePath);
     
+    /// Create a new directory.
+    /**
+     * @param path Path to directory to create.
+     */
+    void mkdir(const std::string &path);
+      
+    
     /// Prints the contents of a file.
     /**
      * @param fileName Path to the file to print.
