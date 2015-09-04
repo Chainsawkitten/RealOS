@@ -59,6 +59,7 @@ void FileSystem::load(const std::string &saveFile) {
 }
 
 void FileSystem::create(const std::string &filePath){
+
 	File* file = root->createFile(filePart(filePath));
 	cout << "Enter file contents: \n";
 	string fileContent;
@@ -162,19 +163,26 @@ void FileSystem::mkdir(const string &path) {
         return;
     }
     
-    if (directory->getDirectory(filePart(path)) != nullptr) {
-        cout << "Directory with that name already exists." << endl;
-        return;
-    }
-    
-    if (directory->getFile(filePart(path)) != nullptr) {
-        cout << "File with same name already exists." << endl;
-        return;
-    }
-    
+	if (checkName(path))
+		return;
+
     directory->createDirectory(filePart(path));
     
     cout << "Directory created." << endl;
+}
+
+bool FileSystem::checkName(const string &path) const{
+	Directory* directory = root->getDirectory(directoryPart(path));
+	if (directory->getDirectory(filePart(path)) != nullptr) {
+		cout << "Directory with that name already exists." << endl;
+		return true;
+	}
+
+	if (directory->getFile(filePart(path)) != nullptr) {
+		cout << "File with same name already exists." << endl;
+		return true;
+	}
+	return false;
 }
 
 void FileSystem::cat(std::string &fileName) const{

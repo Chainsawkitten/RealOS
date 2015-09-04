@@ -103,6 +103,12 @@ public:
 	* @return a vector of unused blocknumbers
 	*/
 	std::vector<int> freeBlocks() const;
+
+	/// Checks whether a file/directory exists or not
+	/**
+	* @return wheter a file/directory exists or not.
+	*/
+	bool checkName(const std::string &path) const;
     
     /// Checks whether a given directory exists.
     /**
