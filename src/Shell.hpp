@@ -20,7 +20,13 @@ public:
 	*/
 	bool getCommand();
 
-	/// Takes usercommand from input and returns number of commands, commands are stored in strArr[].
+private:
+	FileSystem fileSystem;
+
+	std::string user;
+	std::string currentDir;
+    
+    /// Takes usercommand from input and returns number of commands, commands are stored in strArr[].
 	/**
 	@param userCommand The command the user wants to execute.
 	@param strArr[] Array that stores commands.
@@ -48,11 +54,5 @@ public:
 	@return A string with helpful information
 	*/
 	std::string help();
-
-private:
-	FileSystem fileSystem;
-
-	std::string user;
-	std::string currentDir;
 };
 #endif // SHELL_HPP

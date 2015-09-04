@@ -104,6 +104,9 @@ private:
     MemBlockDevice mMemblockDevice;
 	std::vector<bool> freeBlockNumbers;
     Directory* root;
+    
+    static std::string directoryPart(const std::string &path);
+    static std::string filePart(const std::string &path);
 };
 
 #endif // FILESYSTEM_HPP
