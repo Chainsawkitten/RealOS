@@ -8,15 +8,15 @@ Directory::Directory(const std::string &name) {
 }
 
 Directory::~Directory() {
-    for (auto directory : contents) {
+    for (auto directory : directories) {
         delete directory.second;
     }
 }
 
 Directory* Directory::createDirectory(const string &name) {
-    contents[name] = new Directory(name);
+    directories[name] = new Directory(name);
     
-    return contents[name];
+    return directories[name];
 }
 
 Directory* Directory::getDirectory(const string &path) {
@@ -34,37 +34,21 @@ Directory* Directory::getDirectory(const string &path) {
         remaining = path.substr(pos + 1);
     }
     
-    if (contents.find(dir) != contents.end()) {
-        return contents[dir]->getDirectory(remaining);
-    }
+    if (directories.find(dir) != directories.end())
+        return directories[dir]->getDirectory(remaining);
     
     return nullptr;
 }
 
-File* Directory::getFile(const string &path) {
-	string dir;
-	string remaining;
-	size_t pos = path.find('/');
-	if (pos == string::npos){
-		dir = path;
-		for (int i = 0; i < files.size(); i++) {
-			if (files[i].getName() == path)
-				return &files[i];
-		}
-	}
-	else {
-		dir = path.substr(0, pos);
-		remaining = path.substr(pos + 1);
-	}
-	if (contents.find(dir) != contents.end()) {
-		return contents[dir]->getFile(remaining);
-	}
+File* Directory::getFile(const string &name) {
+    if (files.find(name) != files.end())
+        return files[name];
 
 	return nullptr;
 }
 
 void Directory::ls() const {
-    for (auto directory : contents) {
+    for (auto directory : directories) {
         cout << directory.second->toString();
     }
 }

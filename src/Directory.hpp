@@ -28,16 +28,16 @@ public:
      */
     Directory* createDirectory(const std::string &name);
 
-	/// Create a subdirectory in the directory.
+	/// Create a file in the directory.
 	/**
-	* @param name Name of the subdirectory to create.
+	* @param name Name of the file to create.
 	* @return The created directory
 	*/
 	void createFile(const std::string &name, const std::string &content);
 
-	/// Create a subdirectory in the directory.
+	/// Get a file in this directory.
 	/**
-	* @param name Path to the file (relative to this directory).
+	* @param name Name of the file to get.
 	* @return The file or nullptr if it doesn't exist
 	*/
 	File* getFile(const std::string &name);
@@ -61,8 +61,8 @@ public:
 private:
     std::string name;
     
-	std::vector<File> files;
-    std::map<std::string, Directory*> contents;
+	std::map<std::string, File*> files;
+    std::map<std::string, Directory*> directories;
 };
 
 #endif // DIRECTORY_HPP
