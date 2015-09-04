@@ -9,6 +9,7 @@ FileSystem::FileSystem() {
     root->createDirectory("test");
     Directory* test = root->createDirectory("test2");
     test->createDirectory("test3");
+	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
 FileSystem::~FileSystem() {
@@ -21,6 +22,7 @@ void FileSystem::ls() const {
 
 void FileSystem::format() {
 	mMemblockDevice.reset();
+	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
 void FileSystem::save(const std::string &saveFile) const{
