@@ -11,6 +11,10 @@ Directory::~Directory() {
     for (auto directory : directories) {
         delete directory.second;
     }
+    
+    for (auto file : files) {
+        delete file.second;
+    }
 }
 
 Directory* Directory::createDirectory(const string &name) {
