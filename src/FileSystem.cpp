@@ -4,9 +4,8 @@
 
 using namespace std;
 
-
 FileSystem::FileSystem() {
-    root = new Directory(nullptr, "/");
+    root = new Directory("/");
     root->createDirectory("test");
     Directory* test = root->createDirectory("test2");
     test->createDirectory("test3");
@@ -54,6 +53,7 @@ void FileSystem::load(const std::string &saveFile) {
 	file.close();
 }
 
+
 void FileSystem::create(const std::string &filePath){
 	cout << "Enter something to put into the file: \n";
 	string fileContent;
@@ -76,3 +76,8 @@ void FileSystem::cat(std::string &fileName) const{
 		fileLength - 512;
 	}
 }
+
+bool FileSystem::directoryExists(const string &path) {
+    return root->getDirectory(path) != nullptr;
+}
+

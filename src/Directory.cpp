@@ -3,8 +3,7 @@
 
 using namespace std;
 
-Directory::Directory(const Directory* parent, const std::string &name) {
-    this->parent = parent;
+Directory::Directory(const std::string &name) {
     this->name = name;
 }
 
@@ -15,7 +14,7 @@ Directory::~Directory() {
 }
 
 Directory* Directory::createDirectory(const string &name) {
-    contents[name] = new Directory(this, name);
+    contents[name] = new Directory(name);
     
     return contents[name];
 }

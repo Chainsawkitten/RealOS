@@ -26,7 +26,7 @@ public:
 	void append(const File& other);
 
 	///Renames file
-	void rename(std::string name);
+	void rename(const std::string& name);
 
 	/// Get the file information as a string.
 	/**

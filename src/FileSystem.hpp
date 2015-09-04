@@ -86,12 +86,19 @@ public:
      * @param file Path to the file to set permissions for.
      */
     void chmod(int permission, const std::string &file);
-
+    
 	/// Finds first free block in mMemblockDevice
 	/**
 	* @return the first free blocks number
 	*/
 	int findFirstFreeBlock();
+    
+    /// Checks whether a given directory exists.
+    /**
+     * @param path Path to the directory to check.
+     * @return Whether the directory exists
+     */
+    bool directoryExists(const std::string &path);
 
 private:
     MemBlockDevice mMemblockDevice;

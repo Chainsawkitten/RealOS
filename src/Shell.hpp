@@ -55,5 +55,4 @@ private:
 	std::string user;
 	std::string currentDir;
 };
-
 #endif // SHELL_HPP
