@@ -1,4 +1,5 @@
 #include "FileSystem.hpp"
+#include "File.hpp"
 #include <iostream>
 
 using namespace std;
@@ -51,4 +52,20 @@ void FileSystem::load(const std::string &saveFile) {
 		mMemblockDevice.writeBlock(i, buffer);
 	}
 	file.close();
+}
+
+
+void FileSystem::cat(std::string &fileName) const{
+	if (root->getFile(fileName) == nullptr){
+		cout << "404: File not found!\n";
+	}
+	int fileLength = root->getFile(fileName)->getLength();
+	vector<int> tempNrs = root->getFile(fileName)->getBlockNumbers();
+	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
+	for (int i = 0; i < tempNrs.size(); i++){
+		for (int j = 0; j < fileLength || j < 512; j++){
+			cout << mMemblockDevice[tempNrs[i]][j];
+		}
+		fileLength - 512;
+	}
 }

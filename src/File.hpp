@@ -1,7 +1,6 @@
 #ifndef FILE_HPP
 #define FILE_HPP
 
-#include "Directory.hpp"
 #include <string>
 #include <vector>
 
@@ -13,7 +12,6 @@ class File {
 public:
 	/// Create new file.
 	/**
-	* @param parent Parent directory.
 	* @param name Name of the file.
 	*/
 	File(const std::string &name);
@@ -22,27 +20,44 @@ public:
 	~File();
 	
 	///Prints file to screen
-	void cat() const;
+	//void cat(const FileSystem &fileSystem) const;
 
 	///Appends file to this file
 	void append(const File* other);
 
 	///Renames file
-	void rename(string name);
+	void rename(std::string name);
 
 	/// Get the file information as a string.
 	/**
-	* @return String
+	* @return string containing information
 	*/
 	std::string toString() const;
 
+	/// Get the files name.
+	/**
+	* @return string containing the files name
+	*/
+	std::string getName() const;
+
+	/// Get the files length.
+	/**
+	* @return string containing the files name
+	*/
+	int getLength() const;
+
+	/// Get the files blocknumbers
+	/**
+	* @return vector containing the files blocknumbers
+	*/
+	std::vector<int> getBlockNumbers() const;
 private:
-	const Directory* parent;
 	bool read;
 	bool write;
+	int length;
 	std::string name;
 
 	std::vector<int> blockNumbers;
 };
 
-#endif // DIRECTORY_HPP
+#endif // FILE_HPP

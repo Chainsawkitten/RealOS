@@ -3,6 +3,7 @@
 
 #include "MemBlockDevice.hpp"
 #include "Directory.hpp"
+#include "File.hpp"
 #include <vector>
 #include <iostream>
 #include <fstream>
