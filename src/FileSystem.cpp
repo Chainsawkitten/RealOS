@@ -54,6 +54,13 @@ void FileSystem::load(const std::string &saveFile) {
 	file.close();
 }
 
+void FileSystem::create(const std::string &filePath){
+	cout << "Enter something to put into the file: \n";
+	string fileContent;
+	cin >> fileContent;
+	root->getDirectory(filePath);
+}
+
 
 void FileSystem::cat(std::string &fileName) const{
 	if (root->getFile(fileName) == nullptr){

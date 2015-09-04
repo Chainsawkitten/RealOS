@@ -23,7 +23,7 @@ public:
 	//void cat(const FileSystem &fileSystem) const;
 
 	///Appends file to this file
-	void append(const File* other);
+	void append(const File& other);
 
 	///Renames file
 	void rename(std::string name);

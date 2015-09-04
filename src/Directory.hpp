@@ -31,6 +31,13 @@ public:
 
 	/// Create a subdirectory in the directory.
 	/**
+	* @param name Name of the subdirectory to create.
+	* @return The created directory
+	*/
+	void createFile(const std::string &name, const std::string &content);
+
+	/// Create a subdirectory in the directory.
+	/**
 	* @param name Path to the file (relative to this directory).
 	* @return The file or nullptr if it doesn't exist
 	*/
