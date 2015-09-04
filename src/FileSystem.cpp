@@ -52,3 +52,7 @@ void FileSystem::load(const std::string &saveFile) {
 	}
 	file.close();
 }
+
+bool FileSystem::directoryExists(const string &path) {
+    return root->getDirectory(path) != nullptr;
+}

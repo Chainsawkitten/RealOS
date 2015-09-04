@@ -75,7 +75,9 @@ int main() {
                 break;
 
             case 12: // cd
-                
+                if (fileSystem.directoryExists(commandArr[1])) {
+                    currentDir = commandArr[1];
+                }
                 break;
 
             case 13: // pwd

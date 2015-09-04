@@ -91,6 +91,13 @@ public:
 	* @return the first free blocks number
 	*/
 	int findFirstFreeBlock();
+    
+    /// Checks whether a given directory exists.
+    /**
+     * @param path Path to the directory to check.
+     * @return Whether the directory exists
+     */
+    bool directoryExists(const std::string &path);
 
 private:
     MemBlockDevice mMemblockDevice;
