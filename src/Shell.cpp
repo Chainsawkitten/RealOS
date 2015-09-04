@@ -47,10 +47,10 @@ bool Shell::getCommand() {
 
             break;
         case 5: // save
-            fileSystem.save(commandArr[1]);
+            fileSystem.save(absolutePath(commandArr[1]));
             break;
         case 6: // load
-            fileSystem.load(commandArr[1]);
+            fileSystem.load(absolutePath(commandArr[1]));
             break;
         case 7: // rm
 
@@ -73,8 +73,10 @@ bool Shell::getCommand() {
             break;
 
         case 12: // cd
-            if (fileSystem.directoryExists(commandArr[1])) {
-                currentDir = commandArr[1];
+            if (fileSystem.directoryExists(absolutePath(commandArr[1]))) {
+                currentDir = "/" + absolutePath(commandArr[1]);
+                if (currentDir[currentDir.length()-1] != '/')
+                    currentDir += "/";
             }
             break;
 
@@ -116,6 +118,19 @@ int Shell::findCommand(string &command) {
         }
     }
     return index;
+}
+
+std::string Shell::absolutePath(const std::string &path) {
+    /// Fix relative path
+    string temp = path;
+    if (path.length() == 0 || temp[0] != '/')
+        temp = currentDir + temp;
+    temp = temp.substr(1);
+    
+    /// @todo Replace ./
+    /// @todo Replace ../
+    
+    return temp;
 }
 
 string Shell::help() {

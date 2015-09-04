@@ -34,6 +34,14 @@ public:
      */
     int findCommand(std::string &command);
     
+    /// Get the absolute path.
+    /**
+     * Makes path absolute and handles ./ and ../
+     * @param path Relative or absolute path. Absolute path indicated by leading /.
+     * @return Absolute path
+     */
+    std::string absolutePath(const std::string &path);
+    
     /// Returns help-string.
     /**
      @return A string with helpful information
