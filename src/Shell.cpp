@@ -9,150 +9,150 @@ const int MAXCOMMANDS = 8;
 const int NUMAVAILABLECOMMANDS = 15;
 
 string availableCommands[NUMAVAILABLECOMMANDS] = {
-    "quit","format","ls","create","cat","save","load",
-    "rm","copy","append","rename","mkdir","cd","pwd","help"
+	"quit", "format", "ls", "create", "cat", "save", "load",
+	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help"
 };
 
 Shell::Shell(const string &user) {
-    this->user = user;
-    currentDir = "/";
+	this->user = user;
+	currentDir = "/";
 }
 
 bool Shell::getCommand() {
-    string userCommand, commandArr[MAXCOMMANDS];
-    
-    cout << user << ":" << currentDir << "$ ";
-    getline(cin, userCommand);
-    
-    int nrOfCommands = parseCommandString(userCommand, commandArr);
-    if (nrOfCommands > 0) {
-        int cIndex = findCommand(commandArr[0]);
-        switch(cIndex) {
+	string userCommand, commandArr[MAXCOMMANDS];
 
-        case 0: // quit
-            cout << "Exiting" << endl;
-            return false;
-            break;
-        case 1: // format
-            fileSystem.format();
-            break;
-        case 2: // ls
-            cout << "Listing directory" << endl;
-            fileSystem.ls();
-            
-            /// @todo ls with specified directory
-            break;
-        case 3: // create
-            /// @todo create
-            break;
-        case 4: // cat
-            /// @todo cat
-            break;
-        case 5: // save
-            fileSystem.save(absolutePath(commandArr[1]));
-            break;
-        case 6: // load
-            fileSystem.load(absolutePath(commandArr[1]));
-            break;
-        case 7: // rm
-            /// @todo rm
-            break;
+	cout << user << ":" << currentDir << "$ ";
+	getline(cin, userCommand);
 
-        case 8: // copy
-            /// @todo copy
-            break;
+	int nrOfCommands = parseCommandString(userCommand, commandArr);
+	if (nrOfCommands > 0) {
+		int cIndex = findCommand(commandArr[0]);
+		switch (cIndex) {
 
-        case 9: // append
-            /// @todo append
-            break;
+		case 0: // quit
+			cout << "Exiting" << endl;
+			return false;
+			break;
+		case 1: // format
+			fileSystem.format();
+			break;
+		case 2: // ls
+			cout << "Listing directory" << endl;
+			fileSystem.ls();
 
-        case 10: // rename
-            /// @todo rename
-            break;
+			/// @todo ls with specified directory
+			break;
+		case 3: // create
+			/// @todo create
+			break;
+		case 4: // cat
+			/// @todo cat
+			break;
+		case 5: // save
+			fileSystem.save(absolutePath(commandArr[1]));
+			break;
+		case 6: // load
+			fileSystem.load(absolutePath(commandArr[1]));
+			break;
+		case 7: // rm
+			/// @todo rm
+			break;
 
-        case 11: // mkdir
-            /// @todo mkdir
-            break;
+		case 8: // copy
+			/// @todo copy
+			break;
 
-        case 12: // cd
-            if (fileSystem.directoryExists(absolutePath(commandArr[1]))) {
-                currentDir = "/" + absolutePath(commandArr[1]);
-                if (currentDir[currentDir.length()-1] != '/')
-                    currentDir += "/";
-            }
-            break;
+		case 9: // append
+			/// @todo append
+			break;
 
-        case 13: // pwd
-            /// @todo pwd
-            break;
+		case 10: // rename
+			/// @todo rename
+			break;
 
-        case 14: // help
-            cout << help() << endl;
-            break;
+		case 11: // mkdir
+			/// @todo mkdir
+			break;
 
-        default:
-            cout << "Unknown command: " << commandArr[0] << endl;
+		case 12: // cd
+			if (fileSystem.directoryExists(absolutePath(commandArr[1]))) {
+				currentDir = "/" + absolutePath(commandArr[1]);
+				if (currentDir[currentDir.length() - 1] != '/')
+					currentDir += "/";
+			}
+			break;
 
-        }
-    }
-    
-    return true;
+		case 13: // pwd
+			/// @todo pwd
+			break;
+
+		case 14: // help
+			cout << help() << endl;
+			break;
+
+		default:
+			cout << "Unknown command: " << commandArr[0] << endl;
+
+		}
+	}
+
+	return true;
 }
 
 int Shell::parseCommandString(const string &userCommand, string strArr[]) {
-    stringstream ssin(userCommand);
-    int counter = 0;
-    while (ssin.good() && counter < MAXCOMMANDS) {
-        ssin >> strArr[counter];
-        counter++;
-    }
-    if (strArr[0] == "") {
-        counter = 0;
-    }
-    return counter;
+	stringstream ssin(userCommand);
+	int counter = 0;
+	while (ssin.good() && counter < MAXCOMMANDS) {
+		ssin >> strArr[counter];
+		counter++;
+	}
+	if (strArr[0] == "") {
+		counter = 0;
+	}
+	return counter;
 }
 
 int Shell::findCommand(string &command) {
-    int index = -1;
-    for (int i = 0; i < NUMAVAILABLECOMMANDS && index == -1; ++i) {
-        if (command == availableCommands[i]) {
-            index = i;
-        }
-    }
-    return index;
+	int index = -1;
+	for (int i = 0; i < NUMAVAILABLECOMMANDS && index == -1; ++i) {
+		if (command == availableCommands[i]) {
+			index = i;
+		}
+	}
+	return index;
 }
 
 std::string Shell::absolutePath(const std::string &path) {
-    /// Fix relative path
-    string temp = path;
-    if (path.length() == 0 || temp[0] != '/')
-        temp = currentDir + temp;
-    temp = temp.substr(1);
-    
-    /// @todo Replace ./
-    /// @todo Replace ../
-    
-    return temp;
+	/// Fix relative path
+	string temp = path;
+	if (path.length() == 0 || temp[0] != '/')
+		temp = currentDir + temp;
+	temp = temp.substr(1);
+
+	/// @todo Replace ./
+	/// @todo Replace ../
+
+	return temp;
 }
 
 string Shell::help() {
-    string helpStr;
-    helpStr += "OSD Disk Tool .oO Help Screen Oo.\n";
-    helpStr += "-----------------------------------------------------------------------------------\n" ;
-    helpStr += "* quit:                             Quit OSD Disk Tool\n";
-    helpStr += "* format;                           Formats disk\n";
-    helpStr += "* ls     <path>:                    Lists contents of <path>.\n";
-    helpStr += "* create <path>:                    Creates a file and stores contents in <path>\n";
-    helpStr += "* cat    <path>:                    Dumps contents of <file>.\n";
-    helpStr += "* save   <real-file>:               Saves disk to <real-file>\n";
-    helpStr += "* read   <real-file>:               Reads <real-file> onto disk\n";
-    helpStr += "* rm     <file>:                    Removes <file>\n";
-    helpStr += "* copy   <source>    <destination>: Copy <source> to <destination>\n";
-    helpStr += "* append <source>    <destination>: Appends contents of <source> to <destination>\n";
-    helpStr += "* rename <old-file>  <new-file>:    Renames <old-file> to <new-file>\n";
-    helpStr += "* mkdir  <directory>:               Creates a new directory called <directory>\n";
-    helpStr += "* cd     <directory>:               Changes current working directory to <directory>\n";
-    helpStr += "* pwd:                              Get current working directory\n";
-    helpStr += "* help:                             Prints this help screen\n";
-    return helpStr;
+	string helpStr;
+	helpStr += "OSD Disk Tool .oO Help Screen Oo.\n";
+	helpStr += "-----------------------------------------------------------------------------------\n";
+	helpStr += "* quit:                             Quit OSD Disk Tool\n";
+	helpStr += "* format;                           Formats disk\n";
+	helpStr += "* ls     <path>:                    Lists contents of <path>.\n";
+	helpStr += "* create <path>:                    Creates a file and stores contents in <path>\n";
+	helpStr += "* cat    <path>:                    Dumps contents of <file>.\n";
+	helpStr += "* save   <real-file>:               Saves disk to <real-file>\n";
+	helpStr += "* read   <real-file>:               Reads <real-file> onto disk\n";
+	helpStr += "* rm     <file>:                    Removes <file>\n";
+	helpStr += "* copy   <source>    <destination>: Copy <source> to <destination>\n";
+	helpStr += "* append <source>    <destination>: Appends contents of <source> to <destination>\n";
+	helpStr += "* rename <old-file>  <new-file>:    Renames <old-file> to <new-file>\n";
+	helpStr += "* mkdir  <directory>:               Creates a new directory called <directory>\n";
+	helpStr += "* cd     <directory>:               Changes current working directory to <directory>\n";
+	helpStr += "* pwd:                              Get current working directory\n";
+	helpStr += "* help:                             Prints this help screen\n";
+	return helpStr;
 }
