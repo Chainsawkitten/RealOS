@@ -1,8 +1,10 @@
 #ifndef DIRECTORY_HPP
 #define DIRECTORY_HPP
 
+#include "File.hpp"
 #include <string>
 #include <map>
+#include <vector>
 
 /// A directory on the harddrive.
 /**
@@ -25,6 +27,20 @@ public:
      * @return The created directory
      */
     Directory* createDirectory(const std::string &name);
+
+	/// Create a subdirectory in the directory.
+	/**
+	* @param name Name of the subdirectory to create.
+	* @return The created directory
+	*/
+	void createFile(const std::string &name, const std::string &content);
+
+	/// Create a subdirectory in the directory.
+	/**
+	* @param name Path to the file (relative to this directory).
+	* @return The file or nullptr if it doesn't exist
+	*/
+	File* getFile(const std::string &name);
     
     /// Get a subdirectory in the directory.
     /**
@@ -45,6 +61,7 @@ public:
 private:
     std::string name;
     
+	std::vector<File> files;
     std::map<std::string, Directory*> contents;
 };
 

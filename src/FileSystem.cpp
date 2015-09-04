@@ -1,10 +1,11 @@
 #include "FileSystem.hpp"
+#include "File.hpp"
 #include <iostream>
 
 using namespace std;
 
 FileSystem::FileSystem() {
-    root = new Directory(nullptr, "/");
+    root = new Directory("/");
     root->createDirectory("test");
     Directory* test = root->createDirectory("test2");
     test->createDirectory("test3");
@@ -52,6 +53,31 @@ void FileSystem::load(const std::string &saveFile) {
 	file.close();
 }
 
+
+void FileSystem::create(const std::string &filePath){
+	cout << "Enter something to put into the file: \n";
+	string fileContent;
+	cin >> fileContent;
+	root->getDirectory(filePath);
+}
+
+
+void FileSystem::cat(std::string &fileName) const{
+	if (root->getFile(fileName) == nullptr){
+		cout << "404: File not found!\n";
+	}
+	int fileLength = root->getFile(fileName)->getLength();
+	vector<int> tempNrs = root->getFile(fileName)->getBlockNumbers();
+	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
+	for (int i = 0; i < tempNrs.size(); i++){
+		for (int j = 0; j < fileLength || j < 512; j++){
+			cout << mMemblockDevice[tempNrs[i]][j];
+		}
+		fileLength - 512;
+	}
+}
+
 bool FileSystem::directoryExists(const string &path) {
     return root->getDirectory(path) != nullptr;
 }
+
