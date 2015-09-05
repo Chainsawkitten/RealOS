@@ -5,6 +5,9 @@ MemBlockDevice::MemBlockDevice(int nrOfBlocks): BlockDevice(nrOfBlocks) {
 
 }
 
+MemBlockDevice::MemBlockDevice(int nrOfBlocks, int nrOfElements) : BlockDevice(nrOfBlocks, nrOfElements){
+}
+
 MemBlockDevice::MemBlockDevice(const MemBlockDevice &other) : BlockDevice(other) {
 
 }
