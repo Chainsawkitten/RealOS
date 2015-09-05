@@ -69,6 +69,10 @@ void Directory::ls() const {
     }
 }
 
+void Directory::rm(const string& name){
+	files.erase(name);
+}
+
 string Directory::toString() const {
     return "DIR   " + name + "\n";
 }

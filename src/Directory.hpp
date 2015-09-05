@@ -52,6 +52,9 @@ public:
     /// Print the contents of the directory.
     void ls() const;
     
+	/// Removes file listing
+	void rm(const std::string& name);
+
     /// Get the directory information as a string.
     /**
      * @return String containing the directory's information

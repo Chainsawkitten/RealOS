@@ -245,6 +245,18 @@ void FileSystem::cat(std::string &fileName) const{
 	cout << '\n';
 }
 
+void FileSystem::rm(const std::string &path){
+	if (!fileExists(path))
+		return;
+	Directory* directory = root->getDirectory(directoryPart(path));
+	File* file = directory->getFile(filePart(path));
+	for (int i = 0; i < file->getBlockNumbers().size(); i++){
+		freeBlockNumbers[file->getBlockNumbers()[i]] = true;
+	}
+	delete file;
+	directory->rm(filePart(path));
+}
+
 bool FileSystem::directoryExists(const string &path) {
     return root->getDirectory(path) != nullptr;
 }
