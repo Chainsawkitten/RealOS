@@ -59,7 +59,7 @@ bool Shell::getCommand() {
 			fileSystem.load(absolutePath(commandArr[1]));
 			break;
 		case 7: // rm
-			/// @todo rm
+			fileSystem.rm(absolutePath(commandArr[1]));
 			break;
 
 		case 8: // copy

@@ -51,6 +51,8 @@ public:
     
     /// Print the contents of the directory.
     void ls() const;
+
+	void rm(const std::string& path);
     
     /// Get the directory information as a string.
     /**
