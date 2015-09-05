@@ -142,7 +142,7 @@ void FileSystem::appendToFile(File* file, string contents){
 	}
 	
 	for (int j = 0; j < contents.length(); j++){
-		if (bufferPos > 512) { //If pos is greater than 512, we need to write to next block.
+		if (bufferPos > 511) { //If pos is greater than 512, we need to write to next block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
