@@ -74,5 +74,5 @@ void Directory::rm(const string& name){
 }
 
 string Directory::toString() const {
-    return "DIR   " + name + "\n";
+    return "DIR               " + name + "\n";
 }

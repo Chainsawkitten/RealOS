@@ -1,6 +1,7 @@
 #include "FileSystem.hpp"
 #include "File.hpp"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -61,10 +62,13 @@ void FileSystem::load(const std::string &saveFile) {
 void FileSystem::create(const std::string &filePath){
 	if (fileOrDirectoryExists(filePath))
 		return;
-	File* file = root->createFile(filePart(filePath));
+    
+    Directory* directory = root->getDirectory(directoryPart(filePath));
+	File* file = directory->createFile(filePart(filePath));
+    
 	cout << "Enter file contents: \n";
 	string fileContent;
-	cin >> fileContent;
+    getline(cin, fileContent);
 	appendToFile(file, fileContent);
 }
 
@@ -192,8 +196,6 @@ vector<int> FileSystem::freeBlocks() const{
 	return blockList;
 }
 
-
-
 void FileSystem::mkdir(const string &path) {
     if (filePart(path).empty()) {
         cout << "Wrong syntax." << endl;
@@ -214,20 +216,20 @@ void FileSystem::mkdir(const string &path) {
     cout << "Directory created." << endl;
 }
 
-void FileSystem::cat(std::string &fileName) const{
+void FileSystem::cat(const std::string &fileName) const{
     Directory* directory = root->getDirectory(directoryPart(fileName));
     if (directory == nullptr) {
-        cout << "File does not exist.\n" << endl;
+        cout << "File does not exist." << endl;
         return;
     }
     
     File* file = directory->getFile(filePart(fileName));
 	if (file == nullptr){
-        cout << "File does not exist.\n" << endl;
+        cout << "File does not exist." << endl;
         return;
 	}
 	else if (!file->getReadPermission()){
-		cout << "File is read protected.\n";
+		cout << "File is read protected." << endl;
 		return;
 	}
 
@@ -265,7 +267,7 @@ void FileSystem::rm(const std::string &path){
 	File* file = directory->getFile(filePart(path));
 
 	if (!file->getWritePermission()){
-		cout << "File is write protected.\n";
+		cout << "File is write protected." << endl;
 		return;
 	}
 

@@ -99,14 +99,13 @@ bool Shell::getCommand() {
 			if (commandArr[2].length() != 0){
 				int perm = stoi(commandArr[2]);
 				fileSystem.chmod(absolutePath(commandArr[1]), perm);
-			}
-			else
-				cout << "Invalid amount of arguments. \n";
+			} else {
+				cout << "Invalid amount of arguments." << endl;
+            }
 			break;
 
 		default:
 			cout << "Unknown command: " << commandArr[0] << endl;
-
 		}
 	}
 
@@ -136,17 +135,33 @@ int Shell::findCommand(string &command) {
 	return index;
 }
 
-std::string Shell::absolutePath(const std::string &path) {
+string Shell::absolutePath(string path) const {
 	/// Fix relative path
-	string temp = path;
-	if (path.length() == 0 || temp[0] != '/')
-		temp = currentDir + temp;
-	temp = temp.substr(1);
+	if (path.length() == 0 || path[0] != '/')
+		path = currentDir + path;
+	path = path.substr(1);
+    
+    vector<string> parts = split(path, '/');
+    vector<string> temp;
+    
+    /// Replace ./ and ../
+    for (string part : parts) {
+        if (part == "..") {
+            if (!temp.empty())
+                temp.pop_back();
+        } else if (part != ".") {
+            temp.push_back(part);
+        }
+    }
+    
+    path = "";
+    for (size_t i=0; i<temp.size(); i++) {
+        if (i > 0)
+            path += "/";
+        path += temp[i];
+    }
 
-	/// @todo Replace ./
-	/// @todo Replace ../
-
-	return temp;
+	return path;
 }
 
 string Shell::help() {
@@ -169,4 +184,19 @@ string Shell::help() {
 	helpStr += "* pwd:                              Get current working directory\n";
 	helpStr += "* help:                             Prints this help screen\n";
 	return helpStr;
+}
+
+vector<string> Shell::split(string text, char delimiter) {
+    vector<string> parts;
+    
+    while (text.find(delimiter) != string::npos) {
+        size_t pos = text.find(delimiter);
+        parts.push_back(text.substr(0, pos));
+        text = text.substr(pos+1);
+    }
+    
+    if (!text.empty())
+        parts.push_back(text);
+    
+    return parts;
 }
