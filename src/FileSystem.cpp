@@ -62,7 +62,10 @@ void FileSystem::load(const std::string &saveFile) {
 void FileSystem::create(const std::string &filePath){
 	if (fileOrDirectoryExists(filePath))
 		return;
-	File* file = root->createFile(filePart(filePath));
+    
+    Directory* directory = root->getDirectory(directoryPart(filePath));
+	File* file = directory->createFile(filePart(filePath));
+    
 	cout << "Enter file contents: \n";
 	string fileContent;
     getline(cin, fileContent);
