@@ -59,7 +59,8 @@ void FileSystem::load(const std::string &saveFile) {
 }
 
 void FileSystem::create(const std::string &filePath){
-
+	if (fileOrDirectoryExists(filePath))
+		return;
 	File* file = root->createFile(filePart(filePath));
 	cout << "Enter file contents: \n";
 	string fileContent;
@@ -68,6 +69,30 @@ void FileSystem::create(const std::string &filePath){
 }
 
 void FileSystem::append(const std::string &source, const std::string &app){
+	Directory* directory = root->getDirectory(directoryPart(source));
+	File* file = directory->getFile(filePart(source));
+	if (fileExists(source) && fileExists(app)){
+		string appendString = fileToString(app);
+		appendToFile(file, appendString);
+	}
+}
+
+string FileSystem::fileToString(const std::string &path) const{
+	Directory* directory = root->getDirectory(directoryPart(path));
+	File* file = directory->getFile(filePart(path));
+	vector<int> tempNrs = file->getBlockNumbers();
+	string contents;
+	char buffer[512];
+	int bufferPos = 0;
+	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
+	for (int i = 0; i < tempNrs.size(); i++){
+		while ((bufferPos < 511) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
+			contents += mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
+			bufferPos++;
+		}
+		bufferPos = 0;
+	}
+	return contents;
 }
 
 void FileSystem::appendToFile(File* file, string contents){
@@ -78,7 +103,7 @@ void FileSystem::appendToFile(File* file, string contents){
 	int requiredBlocks = 0;	//Keeps track of how many blocks we need to allocate
 	char buffer[512];		//Stores what we want to write to the block
 
-	if (file->getBlockNumbers().size() > 1){
+	if (file->getBlockNumbers().size() > 0){
 		//The file we are appending to is not a new file.
 		//Recalculate file length
 		int tempLength = file->getLength() + contents.length();
@@ -89,7 +114,6 @@ void FileSystem::appendToFile(File* file, string contents){
 			cout << "Not enough free blocks.\n";
 			return;
 		}
-		
 		file->setLength(tempLength);
 
 		//Null out buffer.
@@ -97,11 +121,12 @@ void FileSystem::appendToFile(File* file, string contents){
 			buffer[i] = '\0';
 		//read the last block of the file into the buffer
 		//Size will never exceed 512.
-		string tempString = mMemblockDevice.readBlock(file->getBlockNumbers().back()).toString();
-		bufferPos = tempString.length();
-		for (int i = 0; i < tempString.length(); i++){
-			buffer[i] = tempString[i];
+		char c;
+		while ((bufferPos < 511) && ((c = mMemblockDevice.readBlock(file->getBlockNumbers().back())[bufferPos]) != '\0')){
+			buffer[bufferPos] = c;
+			bufferPos++;
 		}
+		usedBlockNumbers = file->getBlockNumbers();
 	} else {
 		requiredBlocks = ceil(contents.length() / 512.f);
 		//Check to see if there are enough free blocks.
@@ -116,7 +141,7 @@ void FileSystem::appendToFile(File* file, string contents){
 		
 	}
 	
-	for (int j = 0; j < file->getLength(); j++){
+	for (int j = 0; j < contents.length(); j++){
 		if (bufferPos > 512) { //If pos is greater than 512, we need to write to next block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
@@ -131,10 +156,15 @@ void FileSystem::appendToFile(File* file, string contents){
 		buffer[bufferPos] = contents[j];
 		bufferPos++;
 		
-		if (bufferPos == contents.length()){	//If we have reached the end of the string and should write the contents to block.
-			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
-			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
-			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
+		if (j == (contents.length()-1)){	//If we have reached the end of the string and should write the contents to block.
+			//If the files blocknumbers size is greater than 0, then the file already existed and we should append the buffer contents to the last block in the file
+			if (file->getBlockNumbers().size() > 0){
+				mMemblockDevice.writeBlock(file->getBlockNumbers().back(), buffer);
+			} else { //if the file didn't exist previously, we should allocate new blocks to write to.
+				mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
+				freeBlockNumbers[freeBlock[freeBlockPos]] = false;
+				usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
+			}
 		}
 	}
 	file->setBlockNumbers(usedBlockNumbers);
@@ -163,26 +193,12 @@ void FileSystem::mkdir(const string &path) {
         return;
     }
     
-	if (checkName(path))
+	if (fileOrDirectoryExists(path))
 		return;
 
     directory->createDirectory(filePart(path));
     
     cout << "Directory created." << endl;
-}
-
-bool FileSystem::checkName(const string &path) const{
-	Directory* directory = root->getDirectory(directoryPart(path));
-	if (directory->getDirectory(filePart(path)) != nullptr) {
-		cout << "Directory with that name already exists." << endl;
-		return true;
-	}
-
-	if (directory->getFile(filePart(path)) != nullptr) {
-		cout << "File with same name already exists." << endl;
-		return true;
-	}
-	return false;
 }
 
 void FileSystem::cat(std::string &fileName) const{
@@ -198,7 +214,6 @@ void FileSystem::cat(std::string &fileName) const{
         return;
 	}
     
-	//int fileLength = file->getLength();
 	vector<int> tempNrs = file->getBlockNumbers();
 	char buffer[512];
 	int bufferPos = 0;
@@ -215,6 +230,28 @@ void FileSystem::cat(std::string &fileName) const{
 
 bool FileSystem::directoryExists(const string &path) {
     return root->getDirectory(path) != nullptr;
+}
+
+bool FileSystem::fileOrDirectoryExists(const string &path) const{
+	Directory* directory = root->getDirectory(directoryPart(path));
+	if (directory->getDirectory(filePart(path)) != nullptr) {
+		cout << "Directory with that name already exists." << endl;
+		return true;
+	}
+
+	if (directory->getFile(filePart(path)) != nullptr) {
+		cout << "File with same name already exists." << endl;
+		return true;
+	}
+	return false;
+}
+
+bool FileSystem::fileExists(const string &path) const{
+	Directory* directory = root->getDirectory(directoryPart(path));
+	if (directory->getFile(filePart(path)) != nullptr) {
+		return true;
+	}
+	return false;
 }
 
 string FileSystem::directoryPart(const string &path) {

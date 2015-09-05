@@ -67,7 +67,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 9: // append
-			/// @todo append
+			fileSystem.append(absolutePath(commandArr[1]), absolutePath(commandArr[2]));
 			break;
 
 		case 10: // rename
