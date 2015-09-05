@@ -6,11 +6,11 @@
 using namespace std;
 
 const int MAXCOMMANDS = 8;
-const int NUMAVAILABLECOMMANDS = 15;
+const int NUMAVAILABLECOMMANDS = 16;
 
 string availableCommands[NUMAVAILABLECOMMANDS] = {
 	"quit", "format", "ls", "create", "cat", "save", "load",
-	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help"
+	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help", "chmod"
 };
 
 Shell::Shell(const string &user) {
@@ -47,10 +47,10 @@ bool Shell::getCommand() {
 
 			break;
 		case 3: // create
-			/// @todo create
+			fileSystem.create(absolutePath(commandArr[1]));
 			break;
 		case 4: // cat
-			/// @todo cat
+			fileSystem.cat(absolutePath(commandArr[1]));
 			break;
 		case 5: // save
 			fileSystem.save(absolutePath(commandArr[1]));
@@ -59,7 +59,7 @@ bool Shell::getCommand() {
 			fileSystem.load(absolutePath(commandArr[1]));
 			break;
 		case 7: // rm
-			/// @todo rm
+			fileSystem.rm(absolutePath(commandArr[1]));
 			break;
 
 		case 8: // copy
@@ -67,7 +67,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 9: // append
-			/// @todo append
+			fileSystem.append(absolutePath(commandArr[1]), absolutePath(commandArr[2]));
 			break;
 
 		case 10: // rename
@@ -94,6 +94,14 @@ bool Shell::getCommand() {
 
 		case 14: // help
 			cout << help() << endl;
+			break;
+		case 15: // chmod
+			if (commandArr[2].length() != 0){
+				int perm = stoi(commandArr[2]);
+				fileSystem.chmod(absolutePath(commandArr[1]), perm);
+			}
+			else
+				cout << "Invalid amount of arguments. \n";
 			break;
 
 		default:

@@ -23,6 +23,14 @@ Directory* Directory::createDirectory(const string &name) {
     return directories[name];
 }
 
+File* Directory::createFile(const std::string &name){
+	File* newFile = new File(name);
+
+	files[name] = newFile;
+
+	return newFile;
+}
+
 Directory* Directory::getDirectory(const string &path) {
     if (path.empty())
         return this;
@@ -59,6 +67,10 @@ void Directory::ls() const {
     for (auto file : files) {
         cout << file.second->toString();
     }
+}
+
+void Directory::rm(const string& name){
+	files.erase(name);
 }
 
 string Directory::toString() const {
