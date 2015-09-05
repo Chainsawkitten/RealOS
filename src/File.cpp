@@ -1,5 +1,7 @@
 #include "File.hpp"
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -15,21 +17,17 @@ File::~File(){
 }
 
 string File::toString() const {
-    /// @todo Permissions
-    /// @todo File size
+    stringstream temp;
+    temp << "    "
+         << (read ? "R" : "-")
+         << (write ? "W" : "-")
+         << " "
+         << setw(10) << length
+         << " "
+         << name
+         << "\n";
 
-	int filesize = length*8;
-	string tempString = "      " + name + "\n";
-	tempString += "            Bytes:" + std::to_string(filesize) + "\n";
-	string r = "N";
-	if (read == true)
-		r = "Y";
-	string w = "N";
-	if (write == true)
-		w = "Y";
-	tempString += "            Read: " + r + "\n";
-	tempString += "            Write:" + w + "\n";
-	return tempString;
+	return temp.str();
 }
 
 string File::getName() const {
@@ -43,7 +41,6 @@ int File::getLength() const {
 void File::setLength(const int length) {
 	this->length = length;
 }
-
 
 vector<int> File::getBlockNumbers() const{
 	return this->blockNumbers;

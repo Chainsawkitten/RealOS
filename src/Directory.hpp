@@ -30,16 +30,16 @@ public:
 
 	/// Create a file in the directory.
 	/**
-	* @param name Name of the file to create.
-	* @return The created directory
-	*/
+	 * @param name Name of the file to create.
+	 * @return The created directory
+	 */
 	File* createFile(const std::string &name);
 
 	/// Get a file in this directory.
 	/**
-	* @param name Name of the file to get.
-	* @return The file or nullptr if it doesn't exist
-	*/
+	 * @param name Name of the file to get.
+	 * @return The file or nullptr if it doesn't exist
+	 */
 	File* getFile(const std::string &name);
     
     /// Get a subdirectory in the directory.
@@ -51,8 +51,6 @@ public:
     
     /// Print the contents of the directory.
     void ls() const;
-
-	void rm(const std::string& path);
     
 	/// Removes file listing
 	void rm(const std::string& name);
