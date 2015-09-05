@@ -77,6 +77,13 @@ public:
      */
     void append(const std::string &source, const std::string &app);
     
+	/// Helper functions that helps the system to create files
+	/**
+	* @param file file to append to.
+	* @param contents contents to write to file.
+	*/
+	void FileSystem::appendToFile(File* file, std::string contents);
+
     /// Rename a file.
     /**
      * @param source Old file path.
@@ -89,14 +96,33 @@ public:
      * @param permission Permission to set to.
      * @param file Path to the file to set permissions for.
      */
-    void chmod(int permission, const std::string &file);
+	void chmod(const std::string &path, int permission);
     
-	/// Finds first free block in mMemblockDevice
+	/// Finds unused blocknumbers in freeBlockNumbers
 	/**
-	* @return the first free blocks number
+	* @return a vector of unused blocknumbers
 	*/
-	int findFirstFreeBlock();
+	std::vector<int> freeBlocks() const;
+
+	/// Checks whether a file/directory exists or not
+	/**
+	* @return wheter a file/directory exists or not.
+	*/
+	bool fileOrDirectoryExists(const std::string &path) const;
     
+	/// Checks whether a file exists or not
+	/**
+	* @return wheter a file exists or not.
+	*/
+	bool fileExists(const std::string &path) const;
+
+	/// Puts a files content into a string
+	/**
+	* @param path path to the file
+	* @return file content
+	*/
+	std::string fileToString(const std::string &path) const;
+
     /// Checks whether a given directory exists.
     /**
      * @param path Path to the directory to check.

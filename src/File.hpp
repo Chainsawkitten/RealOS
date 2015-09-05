@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+enum Permission { NONE, READ, WRITE, READWRITE };
+
 /// A file on the harddrive.
 /**
 * Contains a record of blocks it spans
@@ -46,11 +48,48 @@ public:
 	*/
 	int getLength() const;
 
+	/// Set the files length.
+	/**
+	* @param string containing the files name
+	*/
+	void setLength(const int length);
+
 	/// Get the files blocknumbers
 	/**
 	* @return vector containing the files blocknumbers
 	*/
 	std::vector<int> getBlockNumbers() const;
+
+	/// Set the files blocknumbers
+	/**
+	* @param vector containing blocknumbers
+	*/
+	void setBlockNumbers(std::vector<int> blockNrs);
+
+	/// gets if the file is able to be written to
+	/**
+	* @return write permission
+	*/
+	bool getWritePermission();
+
+	/// gets if the file is able to be read
+	/**
+	* @return read permission
+	*/
+	bool getReadPermission() const;
+
+	/// sets permission
+	/**
+	* @param permission
+	*/
+	void setPermission(Permission perm);
+
+	/// gets permission
+	/**
+	* @return permission
+	*/
+	Permission getPermission() const;
+
 private:
 	bool read;
 	bool write;
