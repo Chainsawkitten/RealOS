@@ -6,11 +6,11 @@
 using namespace std;
 
 const int MAXCOMMANDS = 8;
-const int NUMAVAILABLECOMMANDS = 15;
+const int NUMAVAILABLECOMMANDS = 16;
 
 string availableCommands[NUMAVAILABLECOMMANDS] = {
 	"quit", "format", "ls", "create", "cat", "save", "load",
-	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help"
+	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help", "chmod"
 };
 
 Shell::Shell(const string &user) {
@@ -94,6 +94,14 @@ bool Shell::getCommand() {
 
 		case 14: // help
 			cout << help() << endl;
+			break;
+		case 15: // chmod
+			if (commandArr[2].length() != 0){
+				int perm = stoi(commandArr[2]);
+				fileSystem.chmod(absolutePath(commandArr[1]), perm);
+			}
+			else
+				cout << "Invalid amount of arguments. \n";
 			break;
 
 		default:

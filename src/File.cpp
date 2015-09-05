@@ -18,8 +18,18 @@ string File::toString() const {
     /// @todo Permissions
     /// @todo File size
 
-	int filesize = length / 8;
-	return "      " + name + "\n";
+	int filesize = length*8;
+	string tempString = "      " + name + "\n";
+	tempString += "            Bytes:" + std::to_string(filesize) + "\n";
+	string r = "N";
+	if (read == true)
+		r = "Y";
+	string w = "N";
+	if (write == true)
+		w = "Y";
+	tempString += "            Read: " + r + "\n";
+	tempString += "            Write:" + w + "\n";
+	return tempString;
 }
 
 string File::getName() const {

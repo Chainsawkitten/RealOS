@@ -170,6 +170,19 @@ void FileSystem::appendToFile(File* file, string contents){
 	file->setBlockNumbers(usedBlockNumbers);
 }
 
+void FileSystem::chmod(const std::string &path, int permission){
+	Directory* directory = root->getDirectory(directoryPart(path));
+	File* file = directory->getFile(filePart(path));
+	if (permission > 4 || permission < 0){
+		cout << "Invalid permission level. Valid permission levels:\n";
+		cout << "0 = NONE.\n";
+		cout << "1 = READ only.\n";
+		cout << "2 = WRITE only.\n";
+		cout << "3 = READ and WRITE permission.\n";
+	}
+	file->setPermission(Permission(permission));
+}
+
 vector<int> FileSystem::freeBlocks() const{
 	vector<int> blockList;
 	for (int i = 0; i < freeBlockNumbers.size(); i++){

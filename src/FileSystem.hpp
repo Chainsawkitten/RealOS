@@ -96,7 +96,7 @@ public:
      * @param permission Permission to set to.
      * @param file Path to the file to set permissions for.
      */
-    void chmod(int permission, const std::string &file);
+	void chmod(const std::string &path, int permission);
     
 	/// Finds unused blocknumbers in freeBlockNumbers
 	/**
