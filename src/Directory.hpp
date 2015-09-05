@@ -51,8 +51,6 @@ public:
     
     /// Print the contents of the directory.
     void ls() const;
-
-	void rm(const std::string& path);
     
 	/// Removes file listing
 	void rm(const std::string& name);

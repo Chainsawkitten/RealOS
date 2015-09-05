@@ -245,6 +245,19 @@ void FileSystem::cat(std::string &fileName) const{
 	cout << '\n';
 }
 
+void FileSystem::copy(const std::string &source, const std::string &dest){
+	if (!fileExists(source)){
+		cout << "Can't copy file, file doest not exist.";
+		return;
+	}
+	if (fileExists(dest)){
+		cout << "Can't copy file, destination already exists.";
+	}
+	File* file = root->createFile(filePart(dest));
+	string contents = fileToString(source);
+	appendToFile(file, contents);
+}
+
 void FileSystem::rm(const std::string &path){
 	if (!fileExists(path))
 		return;
