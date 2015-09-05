@@ -196,8 +196,6 @@ vector<int> FileSystem::freeBlocks() const{
 	return blockList;
 }
 
-
-
 void FileSystem::mkdir(const string &path) {
     if (filePart(path).empty()) {
         cout << "Wrong syntax." << endl;

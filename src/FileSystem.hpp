@@ -79,9 +79,9 @@ public:
     
 	/// Helper functions that helps the system to create files
 	/**
-	* @param file file to append to.
-	* @param contents contents to write to file.
-	*/
+	 * @param file file to append to.
+	 * @param contents contents to write to file.
+	 */
 	void appendToFile(File* file, std::string contents);
 
     /// Rename a file.
@@ -100,27 +100,27 @@ public:
     
 	/// Finds unused blocknumbers in freeBlockNumbers
 	/**
-	* @return a vector of unused blocknumbers
-	*/
+	 * @return a vector of unused blocknumbers
+	 */
 	std::vector<int> freeBlocks() const;
 
 	/// Checks whether a file/directory exists or not
 	/**
-	* @return wheter a file/directory exists or not.
-	*/
+	 * @return wheter a file/directory exists or not.
+	 */
 	bool fileOrDirectoryExists(const std::string &path) const;
     
 	/// Checks whether a file exists or not
 	/**
-	* @return wheter a file exists or not.
-	*/
+	 * @return wheter a file exists or not.
+	 */
 	bool fileExists(const std::string &path) const;
 
 	/// Puts a files content into a string
 	/**
-	* @param path path to the file
-	* @return file content
-	*/
+	 * @param path path to the file
+	 * @return file content
+	 */
 	std::string fileToString(const std::string &path) const;
 
     /// Checks whether a given directory exists.
