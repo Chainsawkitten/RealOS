@@ -65,7 +65,7 @@ void FileSystem::create(const std::string &filePath){
 	File* file = root->createFile(filePart(filePath));
 	cout << "Enter file contents: \n";
 	string fileContent;
-	cin >> fileContent;
+    getline(cin, fileContent);
 	appendToFile(file, fileContent);
 }
 
@@ -218,17 +218,17 @@ void FileSystem::mkdir(const string &path) {
 void FileSystem::cat(const std::string &fileName) const{
     Directory* directory = root->getDirectory(directoryPart(fileName));
     if (directory == nullptr) {
-        cout << "File does not exist.\n" << endl;
+        cout << "File does not exist." << endl;
         return;
     }
     
     File* file = directory->getFile(filePart(fileName));
 	if (file == nullptr){
-        cout << "File does not exist.\n" << endl;
+        cout << "File does not exist." << endl;
         return;
 	}
 	else if (!file->getReadPermission()){
-		cout << "File is read protected.\n";
+		cout << "File is read protected." << endl;
 		return;
 	}
 
@@ -253,7 +253,7 @@ void FileSystem::rm(const std::string &path){
 	File* file = directory->getFile(filePart(path));
 
 	if (!file->getWritePermission()){
-		cout << "File is write protected.\n";
+		cout << "File is write protected." << endl;
 		return;
 	}
 
