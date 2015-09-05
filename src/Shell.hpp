@@ -47,7 +47,7 @@ private:
 	* @param path Relative or absolute path. Absolute path indicated by leading /.
 	* @return Absolute path
 	*/
-	std::string absolutePath(const std::string &path);
+	std::string absolutePath(std::string path);
 
 	/// Returns help-string.
 	/**

@@ -43,7 +43,7 @@ public:
     /**
      * @param fileName Path to the file to print.
      */
-    void cat(std::string &fileName) const;
+    void cat(const std::string &fileName) const;
     
     /// Save the file system to a file on the real hard drive.
     /**
@@ -82,7 +82,7 @@ public:
 	* @param file file to append to.
 	* @param contents contents to write to file.
 	*/
-	void FileSystem::appendToFile(File* file, std::string contents);
+	void appendToFile(File* file, std::string contents);
 
     /// Rename a file.
     /**

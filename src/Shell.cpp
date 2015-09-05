@@ -136,17 +136,16 @@ int Shell::findCommand(string &command) {
 	return index;
 }
 
-std::string Shell::absolutePath(const std::string &path) {
+std::string Shell::absolutePath(string path) {
 	/// Fix relative path
-	string temp = path;
-	if (path.length() == 0 || temp[0] != '/')
-		temp = currentDir + temp;
-	temp = temp.substr(1);
+	if (path.length() == 0 || path[0] != '/')
+		path = currentDir + path;
+	path = path.substr(1);
 
 	/// @todo Replace ./
 	/// @todo Replace ../
 
-	return temp;
+	return path;
 }
 
 string Shell::help() {

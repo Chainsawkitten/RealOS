@@ -1,6 +1,7 @@
 #include "FileSystem.hpp"
 #include "File.hpp"
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
@@ -214,7 +215,7 @@ void FileSystem::mkdir(const string &path) {
     cout << "Directory created." << endl;
 }
 
-void FileSystem::cat(std::string &fileName) const{
+void FileSystem::cat(const std::string &fileName) const{
     Directory* directory = root->getDirectory(directoryPart(fileName));
     if (directory == nullptr) {
         cout << "File does not exist.\n" << endl;
