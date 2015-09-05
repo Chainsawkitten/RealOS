@@ -226,7 +226,11 @@ void FileSystem::cat(std::string &fileName) const{
         cout << "File does not exist.\n" << endl;
         return;
 	}
-    
+	else if (!file->getReadPermission()){
+		cout << "File is read protected.\n";
+		return;
+	}
+
 	vector<int> tempNrs = file->getBlockNumbers();
 	char buffer[512];
 	int bufferPos = 0;
