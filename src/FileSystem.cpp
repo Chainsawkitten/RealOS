@@ -250,6 +250,12 @@ void FileSystem::rm(const std::string &path){
 		return;
 	Directory* directory = root->getDirectory(directoryPart(path));
 	File* file = directory->getFile(filePart(path));
+
+	if (!file->getWritePermission()){
+		cout << "File is write protected.\n";
+		return;
+	}
+
 	for (int i = 0; i < file->getBlockNumbers().size(); i++){
 		freeBlockNumbers[file->getBlockNumbers()[i]] = true;
 	}

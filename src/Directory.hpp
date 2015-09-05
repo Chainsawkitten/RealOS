@@ -54,6 +54,9 @@ public:
 
 	void rm(const std::string& path);
     
+	/// Removes file listing
+	void rm(const std::string& name);
+
     /// Get the directory information as a string.
     /**
      * @return String containing the directory's information
