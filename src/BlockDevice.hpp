@@ -15,6 +15,13 @@ public:
      */
     BlockDevice(int nrOfBlocks);
     
+	/// Create new block device.
+	/**
+	* @param nrOfBlocks Number of blocks.
+	* @param nrOfElements number of elements per block.
+	*/
+	BlockDevice(int nrOfBlocks, int nrOfElements);
+
     /// Copy-constructor.
     /**
      * @param other Other block device to copy.
@@ -74,6 +81,7 @@ public:
 protected:
     Block* memBlocks;
     int nrOfBlocks;
+	int nrOfElements;
     int freePointer;
     
 };

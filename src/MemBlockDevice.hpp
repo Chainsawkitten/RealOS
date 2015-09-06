@@ -11,6 +11,13 @@ public:
      * @param nrOfBlocks Number of blocks on the device.
      */
     MemBlockDevice(int nrOfBlocks = 250);
+
+	/// Create new memory block device.
+	/**
+	*@param nrOfBlocks Number of blocks on the device.
+	*@param nrOfElements Amount of elements per block.
+	*/
+	MemBlockDevice(int nrOfBlocks, int nrOfElements);
     
     /// Copy-constructor.
     /**
@@ -81,6 +88,12 @@ public:
      * @return Number of blocks the device contains.
      */
     int size() const;
+
+	///Get amount of bytes in blocks.
+	/**
+	* @return Number of bytes in blocks
+	*/
+	int getBlockLength() const;
 };
 
 #endif // MEMBLOCKDEVICE_HPP
