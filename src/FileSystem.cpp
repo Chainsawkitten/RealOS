@@ -152,8 +152,7 @@ void FileSystem::appendToFile(File* file, string contents){
 		bufferPos = 0;
 		
 	}
-	
-	int test = contents.length();
+
 	for (int j = 0; j < contents.length(); j++){
 		buffer[bufferPos] = contents[j];
 		bufferPos++;
