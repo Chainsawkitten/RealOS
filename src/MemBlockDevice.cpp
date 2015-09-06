@@ -90,6 +90,10 @@ void MemBlockDevice::reset() {
     }
 }
 
+int MemBlockDevice::getBlockLength() const{
+	return this->memBlocks->size();
+}
+
 int MemBlockDevice::size() const {
     return this->nrOfBlocks;
 }

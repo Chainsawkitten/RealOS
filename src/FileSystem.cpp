@@ -7,6 +7,7 @@ using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory("/");
+	mMemblockDevice = MemBlockDevice(4, 8);
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
@@ -33,27 +34,29 @@ void FileSystem::format() {
 
 void FileSystem::save(const std::string &saveFile) const{
 	std::ofstream file;
-	char buffer[512];
 	int nrOfBlocks = mMemblockDevice.size();
+	int nrOfElements = mMemblockDevice.getBlockLength();
+	char* buffer = new char[nrOfElements];
 	file.open(saveFile, std::ios::out|std::ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
-		for (int j = 0; j < 512; j++){
+		for (int j = 0; j < nrOfElements; j++){
 			buffer[j] = mMemblockDevice.readBlock(i)[j];
 		}
-		file.write(buffer, 512);
+		file.write(buffer, nrOfElements);
 	}
 	file.close();
 }
 
 void FileSystem::load(const std::string &saveFile) {
 	std::ifstream file;
-	char buffer[512];
 	int nrOfBlocks = mMemblockDevice.size();
+	int nrOfElements = mMemblockDevice.getBlockLength();
+	char* buffer = new char[nrOfElements];
 	file.open(saveFile, std::ios::in | std::ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
-		file.read(buffer, 512);
+		file.read(buffer, nrOfElements);
 		mMemblockDevice.writeBlock(i, buffer);
 	}
 	file.close();
@@ -86,11 +89,11 @@ string FileSystem::fileToString(const std::string &path) const{
 	File* file = directory->getFile(filePart(path));
 	vector<int> tempNrs = file->getBlockNumbers();
 	string contents;
-	char buffer[512];
+	char* buffer= new char[mMemblockDevice.getBlockLength()];
 	int bufferPos = 0;
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
-		while ((bufferPos < 511) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
+		while ((bufferPos < (mMemblockDevice.getBlockLength()-1)) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
 			contents += mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
 			bufferPos++;
 		}
@@ -105,7 +108,7 @@ void FileSystem::appendToFile(File* file, string contents){
 	int bufferPos = 0;		//Keeps track of where we are in the buffer
 	int freeBlockPos = 0;	//Keeps track of what free block number we are using
 	int requiredBlocks = 0;	//Keeps track of how many blocks we need to allocate
-	char buffer[512];		//Stores what we want to write to the block
+	char* buffer = new char[mMemblockDevice.getBlockLength()];		//Stores what we want to write to the block
 
 	if (file->getBlockNumbers().size() > 0){
 		//The file we are appending to is not a new file.
@@ -113,7 +116,7 @@ void FileSystem::appendToFile(File* file, string contents){
 		int tempLength = file->getLength() + contents.length();
 		//Calculate how many new blocks we need, if any.
 		//If four total blocks required and 2 already allocated, required blocks will be 2.
-		requiredBlocks = ceil(tempLength / 512.f) - file->getBlockNumbers().size();
+		requiredBlocks = ceil(tempLength / (float)mMemblockDevice.getBlockLength()) - file->getBlockNumbers().size();
 		if (requiredBlocks > freeBlock.size()){
 			cout << "Not enough free blocks.\n";
 			return;
@@ -121,37 +124,36 @@ void FileSystem::appendToFile(File* file, string contents){
 		file->setLength(tempLength);
 
 		//Null out buffer.
-		for (int i = 0; i < 512; i++)
+		for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 			buffer[i] = '\0';
 		//read the last block of the file into the buffer
-		//Size will never exceed 512.
 		char c;
-		while ((bufferPos < 511) && ((c = mMemblockDevice.readBlock(file->getBlockNumbers().back())[bufferPos]) != '\0')){
+		while ((bufferPos < ((float)mMemblockDevice.getBlockLength())) && ((c = mMemblockDevice.readBlock(file->getBlockNumbers().back())[bufferPos]) != '\0')){
 			buffer[bufferPos] = c;
 			bufferPos++;
 		}
 		usedBlockNumbers = file->getBlockNumbers();
 	} else {
-		requiredBlocks = ceil(contents.length() / 512.f);
+		requiredBlocks = ceil(contents.length() / (float)mMemblockDevice.getBlockLength());
 		//Check to see if there are enough free blocks.
 		if (requiredBlocks > freeBlock.size()){
 			cout << "Not enough free blocks.\n";
 			return;
 		}
 		file->setLength(contents.length());
-		for (int i = 0; i < 512; i++)
+		for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 			buffer[i] = '\0';
 		bufferPos = 0;
 		
 	}
 	
 	for (int j = 0; j < contents.length(); j++){
-		if (bufferPos > 511) { //If pos is greater than 512, we need to write to next block.
+		if (bufferPos >(mMemblockDevice.getBlockLength()-1)) { //If pos is greater than block length, we need to write to next block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
 			//Null out buffer.
-			for (int i = 0; i < 512; i++)
+			for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 				buffer[i] = '\0';
 			bufferPos = 0;
 			freeBlockPos++;
@@ -234,11 +236,11 @@ void FileSystem::cat(const std::string &fileName) const{
 	}
 
 	vector<int> tempNrs = file->getBlockNumbers();
-	char buffer[512];
+	char* buffer = new char[mMemblockDevice.getBlockLength()];
 	int bufferPos = 0;
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
-		while ( (bufferPos < 511) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0') ){
+		while ( (bufferPos < (mMemblockDevice.getBlockLength()-1)) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0') ){
 			cout << mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
 			bufferPos++;
 		}
