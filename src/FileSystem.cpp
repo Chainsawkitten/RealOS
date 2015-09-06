@@ -7,7 +7,7 @@ using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory("/");
-	mMemblockDevice = MemBlockDevice(4, 8);
+	mMemblockDevice = MemBlockDevice(4, 4);
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
@@ -147,8 +147,21 @@ void FileSystem::appendToFile(File* file, string contents){
 		
 	}
 	
+	int test = contents.length();
 	for (int j = 0; j < contents.length(); j++){
-		if (bufferPos >(mMemblockDevice.getBlockLength()-1)) { //If pos is greater than block length, we need to write to next block.
+		buffer[bufferPos] = contents[j];
+		bufferPos++;
+		if (j == (contents.length()-1)){//If we have reached the end of the string and should write the contents to block.
+			//If the files blocknumbers size is greater than 0, then the file already existed and we should append the buffer contents to the last block in the file
+			if (file->getBlockNumbers().size() > 0){
+				mMemblockDevice.writeBlock(file->getBlockNumbers().back(), buffer);
+			}
+			else { //if the file didn't exist previously, we should allocate new blocks to write to.
+				mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
+				freeBlockNumbers[freeBlock[freeBlockPos]] = false;
+				usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
+			}
+		} else if (bufferPos >(mMemblockDevice.getBlockLength())) { //If pos is greater than block length, we need to write to next block.
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
@@ -157,20 +170,6 @@ void FileSystem::appendToFile(File* file, string contents){
 				buffer[i] = '\0';
 			bufferPos = 0;
 			freeBlockPos++;
-		}
-		
-		buffer[bufferPos] = contents[j];
-		bufferPos++;
-		
-		if (j == (contents.length()-1)){	//If we have reached the end of the string and should write the contents to block.
-			//If the files blocknumbers size is greater than 0, then the file already existed and we should append the buffer contents to the last block in the file
-			if (file->getBlockNumbers().size() > 0){
-				mMemblockDevice.writeBlock(file->getBlockNumbers().back(), buffer);
-			} else { //if the file didn't exist previously, we should allocate new blocks to write to.
-				mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
-				freeBlockNumbers[freeBlock[freeBlockPos]] = false;
-				usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
-			}
 		}
 	}
 	file->setBlockNumbers(usedBlockNumbers);
@@ -240,7 +239,7 @@ void FileSystem::cat(const std::string &fileName) const{
 	int bufferPos = 0;
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
-		while ( (bufferPos < (mMemblockDevice.getBlockLength()-1)) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0') ){
+		while ( (bufferPos < (mMemblockDevice.getBlockLength())) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0') ){
 			cout << mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
 			bufferPos++;
 		}
