@@ -71,8 +71,10 @@ void FileSystem::load(const std::string &saveFile) {
 }
 
 void FileSystem::create(const std::string &filePath){
-	if (fileOrDirectoryExists(filePath))
+	if (fileOrDirectoryExists(filePath)){
+		cout << "File or directory already exists.";
 		return;
+	}
 	cout << "Enter file contents: \n";
 	string fileContent;
 	getline(cin, fileContent);
@@ -90,12 +92,24 @@ void FileSystem::create(const std::string &filePath){
 	appendToFile(file, fileContent);
 }
 
-void FileSystem::append(const std::string &source, const std::string &app){
-	Directory* directory = root->getDirectory(directoryPart(source));
-	File* file = directory->getFile(filePart(source));
-	if (fileExists(source) && fileExists(app)){
-		string appendString = fileToString(app);
-		appendToFile(file, appendString);
+void FileSystem::append(const std::string &source, const std::string &destination){
+	if (fileExists(destination) && fileExists(source)){
+		
+		Directory* destinationDirectory = root->getDirectory(directoryPart(destination));
+		Directory* sourceDirectory = root->getDirectory(directoryPart(source));
+		File* destinationFile = destinationDirectory->getFile(filePart(destination));
+		File* sourceFile = sourceDirectory->getFile(filePart(source));
+
+		if (sourceFile->getReadPermission() && destinationFile->getWritePermission() ){
+			string appendString = fileToString(source);
+			cout << appendString << " will be added." << endl;
+			appendToFile(destinationFile, appendString);
+		}else{
+			cout << "Files did not have proper read/write permission." << endl;
+		}
+	}
+	else {
+		cout << "File/Files were not found." << endl;
 	}
 }
 
@@ -108,7 +122,7 @@ string FileSystem::fileToString(const std::string &path) const{
 	int bufferPos = 0;
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
-		while ((bufferPos < (mMemblockDevice.getBlockLength()-1)) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
+		while ((bufferPos < (mMemblockDevice.getBlockLength())) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
 			contents += mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
 			bufferPos++;
 		}
@@ -136,7 +150,6 @@ void FileSystem::appendToFile(File* file, string contents){
 			return;
 		}
 		file->setLength(tempLength);
-
 		//Null out buffer.
 		for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 			buffer[i] = '\0';
@@ -152,6 +165,13 @@ void FileSystem::appendToFile(File* file, string contents){
 		//indicating that if we need a new block then we should write the buffer
 		//to the files last block.
 		freeBlock.insert(freeBlock.begin(), file->getBlockNumbers().back());
+		if (bufferPos == (mMemblockDevice.getBlockLength())) { //If pos is greater than block length, we need to write to next block.
+			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
+			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
+			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
+			bufferPos = 0;
+			freeBlockPos++;
+		}
 	} else {
 		requiredBlocks = ceil(contents.length() / (float)mMemblockDevice.getBlockLength());
 		file->setLength(contents.length());
@@ -172,7 +192,6 @@ void FileSystem::appendToFile(File* file, string contents){
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
-			//Null out buffer.
 			for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 				buffer[i] = '\0';
 			bufferPos = 0;
@@ -231,7 +250,6 @@ void FileSystem::cat(const std::string &fileName) const{
         cout << "File does not exist." << endl;
         return;
     }
-    
     File* file = directory->getFile(filePart(fileName));
 	if (file == nullptr){
         cout << "File does not exist." << endl;
@@ -257,19 +275,23 @@ void FileSystem::cat(const std::string &fileName) const{
 }
 
 void FileSystem::copy(const std::string &source, const std::string &dest){
-	if (!fileExists(source)){
-		cout << "Can't copy file, file doesn't not exist.";
+	if (!fileExists(source)) {
+		cout << "Can't copy file, file doest not exist." << endl;
 		return;
 	}
 	if (fileExists(dest)){
-		cout << "Can't copy file, destination already exists.";
+		cout << "Can't copy file, destination already exists." << endl;
 	}
-	File* file = root->createFile(filePart(dest));
+	Directory* directory = root->getDirectory(directoryPart(source));
+	File* sourceFile = directory->getFile(filePart(source));
+	if (!sourceFile->getReadPermission())
+		cout << "File is read protected." << endl;
+	File* destinationFile = root->createFile(filePart(dest));
 	string contents = fileToString(source);
-	appendToFile(file, contents);
+	appendToFile(destinationFile, contents);
 }
 
-void FileSystem::rm(const std::string &path){
+void FileSystem::rm(const std::string &path) {
 	if (!fileExists(path))
 		return;
 	Directory* directory = root->getDirectory(directoryPart(path));
