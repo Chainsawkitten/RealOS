@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 enum Permission { NONE, READ, WRITE, READWRITE };
 
@@ -83,6 +84,18 @@ public:
 	 * @return permission
 	 */
 	Permission getPermission() const;
+    
+    /// Save to file.
+    /**
+     * @param file %File stream to save to.
+     */
+    void save(std::ofstream &file);
+    
+    /// Load from file.
+    /**
+     * @param file %File stream to load from.
+     */
+    void load(std::ifstream &file);
 
 private:
 	bool read;

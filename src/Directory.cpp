@@ -82,10 +82,19 @@ string Directory::toString() const {
 }
 
 void Directory::save(ofstream &file) {
-    /// @todo Save files
+    // Save files
+    size_t length = files.size();
+    file.write(reinterpret_cast<const char*>(&length), sizeof(length));
+    for (auto f : files) {
+        length = f.first.length();
+        file.write(reinterpret_cast<const char*>(&length), sizeof(length));
+        file.write(f.first.c_str(), length);
+        
+        f.second->save(file);
+    }
     
     // Save directories
-    size_t length = directories.size();
+    length = directories.size();
     file.write(reinterpret_cast<const char*>(&length), sizeof(length));
     for (auto d : directories) {
         length = d.first.length();
@@ -97,20 +106,34 @@ void Directory::save(ofstream &file) {
 }
 
 void Directory::load(ifstream &file) {
-    /// @todo Load files
-    
-    // Load directories
+    // Load files
     size_t length;
     file.read(reinterpret_cast<char*>(&length), sizeof(length));
     for (size_t i=0; i<length; i++) {
         size_t nameLength;
         file.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
-        char* buffer = new char[nameLength];
+        char* buffer = new char[nameLength+1];
         file.read(buffer, nameLength);
-        Directory* directory = new Directory(buffer);
-        directories[buffer] = directory;
+        buffer[nameLength] = '\0';
+        File* f = new File(buffer);
+        files[buffer] = f;
         delete[] buffer;
         
-        directory->load(file);
+        f->load(file);
+    }
+    
+    // Load directories
+    file.read(reinterpret_cast<char*>(&length), sizeof(length));
+    for (size_t i=0; i<length; i++) {
+        size_t nameLength;
+        file.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
+        char* buffer = new char[nameLength+1];
+        file.read(buffer, nameLength);
+        buffer[nameLength] = '\0';
+        Directory* d = new Directory(buffer);
+        directories[buffer] = d;
+        delete[] buffer;
+        
+        d->load(file);
     }
 }
