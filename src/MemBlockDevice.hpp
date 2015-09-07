@@ -1,10 +1,10 @@
 #ifndef MEMBLOCKDEVICE_HPP
 #define MEMBLOCKDEVICE_HPP
 
-#include "BlockDevice.hpp"
+#include "Block.hpp"
 
 /// A simulated device containing multiple blocks in memory.
-class MemBlockDevice: public BlockDevice {
+class MemBlockDevice {
 public:
     /// Create new memory block device.
     /**
@@ -41,12 +41,6 @@ public:
      * @return Requested block
      */
     Block &operator[] (int index) const;
-
-    /// Get amount of free blocks.
-    /**
-     * @return The amount of free blocks
-     */
-    int spaceLeft() const;
 
     /// Write to a block on the device.
     /**
@@ -94,6 +88,11 @@ public:
 	* @return Number of bytes in blocks
 	*/
 	int getBlockLength() const;
+    
+private:
+    Block* memBlocks;
+    int nrOfBlocks;
+	int nrOfElements;
 };
 
 #endif // MEMBLOCKDEVICE_HPP
