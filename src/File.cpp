@@ -76,7 +76,7 @@ File::Permission File::getPermission() const {
 		return READWRITE;
 }
 
-void File::save(ofstream &file) {
+void File::save(ofstream &file) const {
     file.write(reinterpret_cast<const char*>(&read), sizeof(read));
     file.write(reinterpret_cast<const char*>(&write), sizeof(write));
     file.write(reinterpret_cast<const char*>(&length), sizeof(length));

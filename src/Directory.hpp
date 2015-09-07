@@ -39,7 +39,7 @@ public:
 	/// Create a file in the directory.
 	/**
 	 * @param name Name of the file to create.
-	 * @return The created directory
+	 * @return The created file
 	 */
 	File* createFile(const std::string &name);
     
@@ -54,12 +54,15 @@ public:
 	 * @param name Name of the file to get.
 	 * @return The file or nullptr if it doesn't exist
 	 */
-	File* getFile(const std::string &name);
+	File* getFile(const std::string &name) const;
     
     /// Print the contents of the directory.
     void ls() const;
     
 	/// Removes file listing
+    /**
+     * @param name Name of the file to remove.
+     */
 	void rm(const std::string &name);
 
     /// Get the directory information as a string.
@@ -72,7 +75,7 @@ public:
     /**
      * @param file %File stream to save to.
      */
-    void save(std::ofstream &file);
+    void save(std::ofstream &file) const;
     
     /// Load from file.
     /**

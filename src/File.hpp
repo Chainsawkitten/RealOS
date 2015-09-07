@@ -39,7 +39,7 @@ public:
 
     /// Set the files length.
 	/**
-	 * @param string containing the files name
+	 * @param length New file length.
 	 */
 	void setLength(const int length);
     
@@ -89,7 +89,7 @@ public:
     /**
      * @param file %File stream to save to.
      */
-    void save(std::ofstream &file);
+    void save(std::ofstream &file) const;
     
     /// Load from file.
     /**
