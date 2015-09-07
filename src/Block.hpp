@@ -98,7 +98,6 @@ public:
 private:
     char *block;
     int nrOfElements;
-    
 };
 
 #endif // BLOCK_HPP

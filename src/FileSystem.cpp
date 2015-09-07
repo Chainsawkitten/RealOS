@@ -212,7 +212,7 @@ void FileSystem::chmod(const std::string &path, int permission){
 		cout << "2 = WRITE only.\n";
 		cout << "3 = READ and WRITE permission.\n";
 	}
-	file->setPermission(Permission(permission));
+	file->setPermission(File::Permission(permission));
 }
 
 vector<int> FileSystem::freeBlocks() const{
