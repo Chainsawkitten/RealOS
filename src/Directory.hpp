@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <fstream>
 
 /// A directory on the harddrive.
 /**
@@ -66,6 +67,18 @@ public:
      * @return String containing the directory's information
      */
     std::string toString() const;
+    
+    /// Save to file.
+    /**
+     * @param file %File stream to save to.
+     */
+    void save(std::ofstream &file);
+    
+    /// Load from file.
+    /**
+     * @param file %File stream to load from.
+     */
+    void load(std::ifstream &file);
     
 private:
     std::string name;

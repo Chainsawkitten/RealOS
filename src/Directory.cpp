@@ -80,3 +80,37 @@ void Directory::rm(const string &name){
 string Directory::toString() const {
     return "DIR               " + name + "\n";
 }
+
+void Directory::save(ofstream &file) {
+    /// @todo Save files
+    
+    // Save directories
+    size_t length = directories.size();
+    file.write(reinterpret_cast<const char*>(&length), sizeof(length));
+    for (auto d : directories) {
+        length = d.first.length();
+        file.write(reinterpret_cast<const char*>(&length), sizeof(length));
+        file.write(d.first.c_str(), length);
+        
+        d.second->save(file);
+    }
+}
+
+void Directory::load(ifstream &file) {
+    /// @todo Load files
+    
+    // Load directories
+    size_t length;
+    file.read(reinterpret_cast<char*>(&length), sizeof(length));
+    for (size_t i=0; i<length; i++) {
+        size_t nameLength;
+        file.read(reinterpret_cast<char*>(&nameLength), sizeof(nameLength));
+        char* buffer = new char[nameLength];
+        file.read(buffer, nameLength);
+        Directory* directory = new Directory(buffer);
+        directories[buffer] = directory;
+        delete[] buffer;
+        
+        directory->load(file);
+    }
+}

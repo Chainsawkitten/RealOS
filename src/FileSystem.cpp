@@ -33,11 +33,11 @@ void FileSystem::format() {
 }
 
 void FileSystem::save(const std::string &saveFile) const{
-	std::ofstream file;
+	ofstream file;
 	int nrOfBlocks = mMemblockDevice.size();
 	int nrOfElements = mMemblockDevice.getBlockLength();
 	char* buffer = new char[nrOfElements];
-	file.open(saveFile, std::ios::out|std::ios::binary);
+	file.open(saveFile, ios::out|ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
 		for (int j = 0; j < nrOfElements; j++){
@@ -45,20 +45,28 @@ void FileSystem::save(const std::string &saveFile) const{
 		}
 		file.write(buffer, nrOfElements);
 	}
+    
+    root->save(file);
+    
 	file.close();
 }
 
 void FileSystem::load(const std::string &saveFile) {
-	std::ifstream file;
+    format();
+    
+	ifstream file;
 	int nrOfBlocks = mMemblockDevice.size();
 	int nrOfElements = mMemblockDevice.getBlockLength();
 	char* buffer = new char[nrOfElements];
-	file.open(saveFile, std::ios::in | std::ios::binary);
+	file.open(saveFile, ios::in | ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
 		file.read(buffer, nrOfElements);
 		mMemblockDevice.writeBlock(i, buffer);
 	}
+    
+    root->load(file);
+    
 	file.close();
 }
 
