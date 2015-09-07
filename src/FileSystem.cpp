@@ -63,8 +63,10 @@ void FileSystem::load(const std::string &saveFile) {
 }
 
 void FileSystem::create(const std::string &filePath){
-	if (fileOrDirectoryExists(filePath))
+	if (fileOrDirectoryExists(filePath)){
+		cout << "File or directory already exists.";
 		return;
+	}
 	cout << "Enter file contents: \n";
 	string fileContent;
 	getline(cin, fileContent);
@@ -84,19 +86,22 @@ void FileSystem::create(const std::string &filePath){
 
 void FileSystem::append(const std::string &source, const std::string &destination){
 	if (fileExists(destination) && fileExists(source)){
+		
 		Directory* destinationDirectory = root->getDirectory(directoryPart(destination));
 		Directory* sourceDirectory = root->getDirectory(directoryPart(source));
 		File* destinationFile = destinationDirectory->getFile(filePart(destination));
 		File* sourceFile = sourceDirectory->getFile(filePart(source));
+
 		if (sourceFile->getReadPermission() && destinationFile->getWritePermission() ){
 			string appendString = fileToString(source);
+			cout << appendString << " will be added." << endl;
 			appendToFile(destinationFile, appendString);
 		}else{
 			cout << "Files did not have proper read/write permission." << endl;
 		}
 	}
 	else {
-		cout << "Files were not found." << endl;
+		cout << "File/Files were not found." << endl;
 	}
 }
 
@@ -109,7 +114,7 @@ string FileSystem::fileToString(const std::string &path) const{
 	int bufferPos = 0;
 	//Read blocks and print characters until there is no more characters left or we have read a whole block (and should start to read a new block).
 	for (int i = 0; i < tempNrs.size(); i++){
-		while ((bufferPos < (mMemblockDevice.getBlockLength()-1)) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
+		while ((bufferPos < (mMemblockDevice.getBlockLength())) && (mMemblockDevice.readBlock(tempNrs[i])[bufferPos] != '\0')){
 			contents += mMemblockDevice.readBlock(tempNrs[i])[bufferPos];
 			bufferPos++;
 		}
@@ -137,7 +142,6 @@ void FileSystem::appendToFile(File* file, string contents){
 			return;
 		}
 		file->setLength(tempLength);
-
 		//Null out buffer.
 		for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 			buffer[i] = '\0';
