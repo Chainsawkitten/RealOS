@@ -250,7 +250,7 @@ void FileSystem::cat(const std::string &fileName) const{
 
 void FileSystem::copy(const std::string &source, const std::string &dest){
 	if (!fileExists(source)){
-		cout << "Can't copy file, file doest not exist.";
+		cout << "Can't copy file, file doesn't not exist.";
 		return;
 	}
 	if (fileExists(dest)){
@@ -277,6 +277,34 @@ void FileSystem::rm(const std::string &path){
 	}
 	delete file;
 	directory->rm(filePart(path));
+}
+
+void FileSystem::rename(const string &source, const string &newName) {
+    if (newName.empty()) {
+        cout << "New name can't be empty." << endl;
+        return;
+    }
+    
+    if (!fileExists(source)) {
+        cout << "Can't rename file, source does not exist." << endl;
+        return;
+    }
+    
+    if (fileOrDirectoryExists(newName))
+        return;
+    
+    Directory* sourceDirectory = root->getDirectory(directoryPart(source));
+    Directory* destinationDirectory = root->getDirectory(directoryPart(newName));
+    
+    if (destinationDirectory == nullptr) {
+        cout << "Destination directory does not exist." << endl;
+        return;
+    }
+    
+    File* file = sourceDirectory->getFile(filePart(source));
+    sourceDirectory->rm(filePart(source));
+    file->rename(newName);
+    destinationDirectory->addFile(file);
 }
 
 bool FileSystem::directoryExists(const string &path) {

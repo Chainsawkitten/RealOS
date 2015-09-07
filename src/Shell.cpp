@@ -71,7 +71,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 10: // rename
-			/// @todo rename
+            fileSystem.rename(absolutePath(commandArr[1]), absolutePath(commandArr[2]));
 			break;
 
 		case 11: // mkdir

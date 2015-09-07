@@ -27,6 +27,13 @@ public:
      * @return The created directory
      */
     Directory* createDirectory(const std::string &name);
+    
+    /// Get a subdirectory in the directory.
+    /**
+     * @param path Path to the subdirectory (relative to this directory).
+     * @return The directory or nullptr if it doesn't exist
+     */
+    Directory* getDirectory(const std::string &path);
 
 	/// Create a file in the directory.
 	/**
@@ -34,6 +41,12 @@ public:
 	 * @return The created directory
 	 */
 	File* createFile(const std::string &name);
+    
+    /// Add an existing file to the directory.
+    /**
+     * @param file The file to add.
+     */
+    void addFile(File* file);
 
 	/// Get a file in this directory.
 	/**
@@ -42,18 +55,11 @@ public:
 	 */
 	File* getFile(const std::string &name);
     
-    /// Get a subdirectory in the directory.
-    /**
-     * @param path Path to the subdirectory (relative to this directory).
-     * @return The directory or nullptr if it doesn't exist
-     */
-    Directory* getDirectory(const std::string& path);
-    
     /// Print the contents of the directory.
     void ls() const;
     
 	/// Removes file listing
-	void rm(const std::string& name);
+	void rm(const std::string &name);
 
     /// Get the directory information as a string.
     /**

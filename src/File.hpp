@@ -20,14 +20,8 @@ public:
 
 	/// Destructor.
 	~File();
-	
-	///Prints file to screen
-	//void cat(const FileSystem &fileSystem) const;
-
-	///Appends file to this file
-	void append(const File& other);
-
-	///Renames file
+    
+	/// Renames file
 	void rename(const std::string& name);
 
 	/// Get the file information as a string.

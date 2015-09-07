@@ -23,14 +23,6 @@ Directory* Directory::createDirectory(const string &name) {
     return directories[name];
 }
 
-File* Directory::createFile(const std::string &name){
-	File* newFile = new File(name);
-
-	files[name] = newFile;
-
-	return newFile;
-}
-
 Directory* Directory::getDirectory(const string &path) {
     if (path.empty())
         return this;
@@ -52,6 +44,18 @@ Directory* Directory::getDirectory(const string &path) {
     return nullptr;
 }
 
+File* Directory::createFile(const std::string &name){
+	File* newFile = new File(name);
+
+	files[name] = newFile;
+
+	return newFile;
+}
+
+void Directory::addFile(File* file) {
+    files[file->getName()] = file;
+}
+
 File* Directory::getFile(const string &name) {
     if (files.find(name) != files.end())
         return files[name];
@@ -69,7 +73,7 @@ void Directory::ls() const {
     }
 }
 
-void Directory::rm(const string& name){
+void Directory::rm(const string &name){
 	files.erase(name);
 }
 

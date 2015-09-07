@@ -34,6 +34,10 @@ string File::getName() const {
 	return this->name;
 }
 
+void File::rename(const string &name) {
+    this->name = name;
+}
+
 int File::getLength() const {
 	return this->length;
 }
