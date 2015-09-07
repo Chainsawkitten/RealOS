@@ -157,6 +157,13 @@ void FileSystem::appendToFile(File* file, string contents){
 		//indicating that if we need a new block then we should write the buffer
 		//to the files last block.
 		freeBlock.insert(freeBlock.begin(), file->getBlockNumbers().back());
+		if (bufferPos == (mMemblockDevice.getBlockLength())) { //If pos is greater than block length, we need to write to next block.
+			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
+			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
+			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
+			bufferPos = 0;
+			freeBlockPos++;
+		}
 	} else {
 		requiredBlocks = ceil(contents.length() / (float)mMemblockDevice.getBlockLength());
 		file->setLength(contents.length());
@@ -177,7 +184,6 @@ void FileSystem::appendToFile(File* file, string contents){
 			mMemblockDevice.writeBlock(freeBlock[freeBlockPos], buffer);
 			freeBlockNumbers[freeBlock[freeBlockPos]] = false;
 			usedBlockNumbers.push_back(freeBlock[freeBlockPos]);
-			//Null out buffer.
 			for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 				buffer[i] = '\0';
 			bufferPos = 0;
