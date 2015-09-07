@@ -54,7 +54,7 @@ public:
 	 * @param name Name of the file to get.
 	 * @return The file or nullptr if it doesn't exist
 	 */
-	File* getFile(const std::string &name) const;
+	File* getFile(const std::string &name);
     
     /// Print the contents of the directory.
     void ls() const;

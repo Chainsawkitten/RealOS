@@ -56,7 +56,7 @@ void Directory::addFile(File* file) {
     files[file->getName()] = file;
 }
 
-File* Directory::getFile(const string &name) const {
+File* Directory::getFile(const string &name) {
     if (files.find(name) != files.end())
         return files[name];
 
