@@ -82,12 +82,21 @@ void FileSystem::create(const std::string &filePath){
 	appendToFile(file, fileContent);
 }
 
-void FileSystem::append(const std::string &source, const std::string &app){
-	Directory* directory = root->getDirectory(directoryPart(source));
-	File* file = directory->getFile(filePart(source));
-	if (fileExists(source) && fileExists(app)){
-		string appendString = fileToString(app);
-		appendToFile(file, appendString);
+void FileSystem::append(const std::string &source, const std::string &destination){
+	if (fileExists(destination) && fileExists(source)){
+		Directory* destinationDirectory = root->getDirectory(directoryPart(destination));
+		Directory* sourceDirectory = root->getDirectory(directoryPart(source));
+		File* destinationFile = destinationDirectory->getFile(filePart(destination));
+		File* sourceFile = sourceDirectory->getFile(filePart(source));
+		if (sourceFile->getReadPermission() && destinationFile->getWritePermission() ){
+			string appendString = fileToString(source);
+			appendToFile(destinationFile, appendString);
+		}else{
+			cout << "Files did not have proper read/write permission." << endl;
+		}
+	}
+	else {
+		cout << "Files were not found." << endl;
 	}
 }
 
