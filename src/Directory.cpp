@@ -44,7 +44,7 @@ Directory* Directory::getDirectory(const string &path) {
     return nullptr;
 }
 
-File* Directory::createFile(const std::string &name){
+File* Directory::createFile(const std::string &name) {
 	File* newFile = new File(name);
 
 	files[name] = newFile;
@@ -81,7 +81,7 @@ string Directory::toString() const {
     return "DIR               " + name + "\n";
 }
 
-void Directory::save(ofstream &file) {
+void Directory::save(ofstream &file) const {
     // Save files
     size_t length = files.size();
     file.write(reinterpret_cast<const char*>(&length), sizeof(length));

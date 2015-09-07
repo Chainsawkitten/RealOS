@@ -24,24 +24,22 @@ endfunction()
 # Source files
 set(SRCS
         src/Block.cpp
-        src/BlockDevice.cpp
         src/Directory.cpp
+        src/File.cpp
         src/FileSystem.cpp
         src/main.cpp
         src/MemBlockDevice.cpp
         src/Shell.cpp
-	src/File.cpp
     )
 
 # Header files
 set(HEADERS
         src/Block.hpp
-        src/BlockDevice.hpp
         src/Directory.hpp
+        src/File.hpp
         src/FileSystem.hpp
         src/MemBlockDevice.hpp
         src/Shell.hpp
-	src/File.hpp
     )
 
 # Target: Shell

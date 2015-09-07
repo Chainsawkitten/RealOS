@@ -95,6 +95,7 @@ bool Shell::getCommand() {
 		case 14: // help
 			cout << help() << endl;
 			break;
+            
 		case 15: // chmod
 			if (commandArr[2].length() != 0){
 				int perm = stoi(commandArr[2]);
@@ -136,7 +137,7 @@ int Shell::findCommand(string &command) {
 }
 
 string Shell::absolutePath(string path) const {
-	/// Fix relative path
+	// Fix relative path
 	if (path.length() == 0 || path[0] != '/')
 		path = currentDir + path;
 	path = path.substr(1);
@@ -144,7 +145,7 @@ string Shell::absolutePath(string path) const {
     vector<string> parts = split(path, '/');
     vector<string> temp;
     
-    /// Replace ./ and ../
+    // Replace ./ and ../
     for (string part : parts) {
         if (part == "..") {
             if (!temp.empty())
@@ -182,6 +183,7 @@ string Shell::help() {
 	helpStr += "* mkdir  <directory>:               Creates a new directory called <directory>\n";
 	helpStr += "* cd     <directory>:               Changes current working directory to <directory>\n";
 	helpStr += "* pwd:                              Get current working directory\n";
+    helpStr += "* chmod  <file>      <permissions>: Change permissions for <file> to <permissions>.\n";
 	helpStr += "* help:                             Prints this help screen\n";
 	return helpStr;
 }
