@@ -5,83 +5,83 @@
 #include <vector>
 #include <fstream>
 
-enum Permission { NONE, READ, WRITE, READWRITE };
-
 /// A file on the harddrive.
 /**
-* Contains a record of blocks it spans
-*/
+ * Contains a record of blocks it spans.
+ */
 class File {
 public:
+    /// File permissions.
+    enum Permission {
+        NONE, ///< No permissions granted.
+        READ, ///< Reading but not writing.
+        WRITE, ///< Writing, but not reading.
+        READWRITE ///< Both reading and writing.
+    };
+    
 	/// Create new file.
 	/**
 	 * @param name Name of the file.
 	 */
 	File(const std::string &name);
-
-	/// Destructor.
-	~File();
     
-	/// Renames file
+	/// Renames file.
+    /**
+     * @param name New filename.
+     */
 	void rename(const std::string& name);
-
-	/// Get the file information as a string.
+    
+    /// Get the file's name.
 	/**
-	 * @return string containing information
-	 */
-	std::string toString() const;
-
-	/// Get the files name.
-	/**
-	 * @return string containing the files name
+	 * @return string The file's name
 	 */
 	std::string getName() const;
 
-	/// Get the files length.
-	/**
-	 * @return string containing the files name
-	 */
-	int getLength() const;
-
-	/// Set the files length.
+    /// Set the files length.
 	/**
 	 * @param string containing the files name
 	 */
 	void setLength(const int length);
-
-	/// Get the files blocknumbers
+    
+	/// Get the files length.
 	/**
-	 * @return vector containing the files blocknumbers
+	 * @return The length of the file
+	 */
+	int getLength() const;
+    
+    /// Set the file's block numbers.
+	/**
+	 * @param blockNrs The new block numbers.
+	 */
+	void setBlockNumbers(std::vector<int> blockNrs);
+    
+	/// Get the file's block numbers.
+	/**
+	 * @return The file's block numbers
 	 */
 	std::vector<int> getBlockNumbers() const;
 
-	/// Set the files blocknumbers
+    /// Set permissions.
 	/**
-	 * @param vector containing blocknumbers
+	 * @param perm File permissions.
 	 */
-	void setBlockNumbers(std::vector<int> blockNrs);
-
-	/// gets if the file is able to be written to
+	void setPermission(Permission perm);
+    
+	/// Get whether writing to the file is allowed.
 	/**
-	 * @return write permission
+	 * @return Whether writing to the file is allowed
 	 */
-	bool getWritePermission();
+	bool getWritePermission() const;
 
-	/// gets if the file is able to be read
+	/// Get whether reading from the file is allowed.
 	/**
-	 * @return read permission
+	 * @return Whether reading from the file is allowed
 	 */
 	bool getReadPermission() const;
 
-	/// sets permission
+	/// Get permissions.
 	/**
-	 * @param permission
-	 */
-	void setPermission(Permission perm);
-
-	/// gets permission
-	/**
-	 * @return permission
+	 * @return File permissions
 	 */
 	Permission getPermission() const;
     
@@ -96,6 +96,12 @@ public:
      * @param file %File stream to load from.
      */
     void load(std::ifstream &file);
+    
+    /// Get the file information as a string.
+	/**
+	 * @return String containing information about the file
+	 */
+	std::string toString() const;
 
 private:
 	bool read;
