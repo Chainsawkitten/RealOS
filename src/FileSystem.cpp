@@ -242,7 +242,6 @@ void FileSystem::cat(const std::string &fileName) const{
         cout << "File does not exist." << endl;
         return;
     }
-    
     File* file = directory->getFile(filePart(fileName));
 	if (file == nullptr){
         cout << "File does not exist." << endl;
@@ -269,15 +268,19 @@ void FileSystem::cat(const std::string &fileName) const{
 
 void FileSystem::copy(const std::string &source, const std::string &dest){
 	if (!fileExists(source)){
-		cout << "Can't copy file, file doest not exist.";
+		cout << "Can't copy file, file doest not exist." << endl;
 		return;
 	}
 	if (fileExists(dest)){
-		cout << "Can't copy file, destination already exists.";
+		cout << "Can't copy file, destination already exists." << endl;
 	}
-	File* file = root->createFile(filePart(dest));
+	Directory* directory = root->getDirectory(directoryPart(source));
+	File* sourceFile = directory->getFile(filePart(source));
+	if (!sourceFile->getReadPermission())
+		cout << "File is read protected." << endl;
+	File* destinationFile = root->createFile(filePart(dest));
 	string contents = fileToString(source);
-	appendToFile(file, contents);
+	appendToFile(destinationFile, contents);
 }
 
 void FileSystem::rm(const std::string &path){
