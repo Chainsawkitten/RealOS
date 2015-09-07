@@ -33,11 +33,11 @@ void FileSystem::format() {
 }
 
 void FileSystem::save(const std::string &saveFile) const{
-	std::ofstream file;
+	ofstream file;
 	int nrOfBlocks = mMemblockDevice.size();
 	int nrOfElements = mMemblockDevice.getBlockLength();
 	char* buffer = new char[nrOfElements];
-	file.open(saveFile, std::ios::out|std::ios::binary);
+	file.open(saveFile, ios::out|ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
 		for (int j = 0; j < nrOfElements; j++){
@@ -45,20 +45,28 @@ void FileSystem::save(const std::string &saveFile) const{
 		}
 		file.write(buffer, nrOfElements);
 	}
+    
+    root->save(file);
+    
 	file.close();
 }
 
 void FileSystem::load(const std::string &saveFile) {
-	std::ifstream file;
+    format();
+    
+	ifstream file;
 	int nrOfBlocks = mMemblockDevice.size();
 	int nrOfElements = mMemblockDevice.getBlockLength();
 	char* buffer = new char[nrOfElements];
-	file.open(saveFile, std::ios::in | std::ios::binary);
+	file.open(saveFile, ios::in | ios::binary);
 	
 	for (int i = 0; i < nrOfBlocks; i++){
 		file.read(buffer, nrOfElements);
 		mMemblockDevice.writeBlock(i, buffer);
 	}
+    
+    root->load(file);
+    
 	file.close();
 }
 
@@ -267,7 +275,7 @@ void FileSystem::cat(const std::string &fileName) const{
 }
 
 void FileSystem::copy(const std::string &source, const std::string &dest){
-	if (!fileExists(source)){
+	if (!fileExists(source)) {
 		cout << "Can't copy file, file doest not exist." << endl;
 		return;
 	}
@@ -283,7 +291,7 @@ void FileSystem::copy(const std::string &source, const std::string &dest){
 	appendToFile(destinationFile, contents);
 }
 
-void FileSystem::rm(const std::string &path){
+void FileSystem::rm(const std::string &path) {
 	if (!fileExists(path))
 		return;
 	Directory* directory = root->getDirectory(directoryPart(path));
@@ -299,6 +307,34 @@ void FileSystem::rm(const std::string &path){
 	}
 	delete file;
 	directory->rm(filePart(path));
+}
+
+void FileSystem::rename(const string &source, const string &newName) {
+    if (newName.empty()) {
+        cout << "New name can't be empty." << endl;
+        return;
+    }
+    
+    if (!fileExists(source)) {
+        cout << "Can't rename file, source does not exist." << endl;
+        return;
+    }
+    
+    if (fileOrDirectoryExists(newName))
+        return;
+    
+    Directory* sourceDirectory = root->getDirectory(directoryPart(source));
+    Directory* destinationDirectory = root->getDirectory(directoryPart(newName));
+    
+    if (destinationDirectory == nullptr) {
+        cout << "Destination directory does not exist." << endl;
+        return;
+    }
+    
+    File* file = sourceDirectory->getFile(filePart(source));
+    sourceDirectory->rm(filePart(source));
+    file->rename(newName);
+    destinationDirectory->addFile(file);
 }
 
 bool FileSystem::directoryExists(const string &path) {

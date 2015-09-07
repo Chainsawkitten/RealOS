@@ -53,10 +53,10 @@ bool Shell::getCommand() {
 			fileSystem.cat(absolutePath(commandArr[1]));
 			break;
 		case 5: // save
-			fileSystem.save(absolutePath(commandArr[1]));
+			fileSystem.save(commandArr[1]);
 			break;
 		case 6: // load
-			fileSystem.load(absolutePath(commandArr[1]));
+			fileSystem.load(commandArr[1]);
 			break;
 		case 7: // rm
 			fileSystem.rm(absolutePath(commandArr[1]));
@@ -71,7 +71,7 @@ bool Shell::getCommand() {
 			break;
 
 		case 10: // rename
-			/// @todo rename
+            fileSystem.rename(absolutePath(commandArr[1]), absolutePath(commandArr[2]));
 			break;
 
 		case 11: // mkdir

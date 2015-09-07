@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 enum Permission { NONE, READ, WRITE, READWRITE };
 
@@ -20,14 +21,8 @@ public:
 
 	/// Destructor.
 	~File();
-	
-	///Prints file to screen
-	//void cat(const FileSystem &fileSystem) const;
-
-	///Appends file to this file
-	void append(const File& other);
-
-	///Renames file
+    
+	/// Renames file
 	void rename(const std::string& name);
 
 	/// Get the file information as a string.
@@ -89,6 +84,18 @@ public:
 	 * @return permission
 	 */
 	Permission getPermission() const;
+    
+    /// Save to file.
+    /**
+     * @param file %File stream to save to.
+     */
+    void save(std::ofstream &file);
+    
+    /// Load from file.
+    /**
+     * @param file %File stream to load from.
+     */
+    void load(std::ifstream &file);
 
 private:
 	bool read;
