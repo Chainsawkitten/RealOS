@@ -5,6 +5,9 @@ MemBlockDevice::MemBlockDevice(int nrOfBlocks): BlockDevice(nrOfBlocks) {
 
 }
 
+MemBlockDevice::MemBlockDevice(int nrOfBlocks, int nrOfElements) : BlockDevice(nrOfBlocks, nrOfElements){
+}
+
 MemBlockDevice::MemBlockDevice(const MemBlockDevice &other) : BlockDevice(other) {
 
 }
@@ -85,6 +88,10 @@ void MemBlockDevice::reset() {
     for (int i = 0; i < this->nrOfBlocks; ++i) {
         this->memBlocks[i].reset('0');
     }
+}
+
+int MemBlockDevice::getBlockLength() const{
+	return this->memBlocks->size();
 }
 
 int MemBlockDevice::size() const {
