@@ -40,7 +40,7 @@ public:
     /// Print block to output stream.
     /**
      * @param os Output stream to print to.
-     * @param blck Block to prient.
+     * @param blck %Block to print.
      * @return The output stream
      */
     friend std::ostream& operator<<(std::ostream &os, const Block& blck)
@@ -84,7 +84,7 @@ public:
     
     /// Write the block's contents.
     /**
-     * Use with caution! Make sure that cArr is at least as large as private member block.
+     * @warning Use with caution! Make sure that cArr is at least as large as private member block.
      * @param cArr The content as a char-array.
      */
     void writeBlock(const char cArr[]);
