@@ -11,7 +11,7 @@
  */
 class File {
 public:
-    /// File permissions.
+    /// %File permissions.
     enum Permission {
         NONE, ///< No permissions granted.
         READ, ///< Reading but not writing.
@@ -27,6 +27,7 @@ public:
     
 	/// Renames file.
     /**
+     * @warning Does not update file tables in directory. Use FileSystem::rename.
      * @param name New filename.
      */
 	void rename(const std::string& name);
@@ -39,6 +40,7 @@ public:
 
     /// Set the files length.
 	/**
+     * @warning Does not actually allocate more space on the harddrive.
 	 * @param length New file length.
 	 */
 	void setLength(const int length);
@@ -51,6 +53,7 @@ public:
     
     /// Set the file's block numbers.
 	/**
+     * @warning Does not check if the block numbers are valid.
 	 * @param blockNrs The new block numbers.
 	 */
 	void setBlockNumbers(std::vector<int> blockNrs);
@@ -63,7 +66,7 @@ public:
 
     /// Set permissions.
 	/**
-	 * @param perm File permissions.
+	 * @param perm %File permissions.
 	 */
 	void setPermission(Permission perm);
     
@@ -81,7 +84,7 @@ public:
 
 	/// Get permissions.
 	/**
-	 * @return File permissions
+	 * @return %File permissions
 	 */
 	Permission getPermission() const;
     

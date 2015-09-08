@@ -5,7 +5,7 @@
 #include <vector>
 #include "FileSystem.hpp"
 
-/// Shell the user can interact with the file system through.
+/// %Shell the user can interact with the file system through.
 class Shell {
 public:
 	/// Create new shell.
@@ -16,6 +16,7 @@ public:
 
 	/// Read and parse a user command.
 	/**
+     * Type `help` for a list of available commands.
 	 * @return Whether execution should continue
 	 */
 	bool getCommand();

@@ -60,7 +60,7 @@ public:
     
     /// Write to a block on the device.
     /**
-     * Use with caution! Make sure that cArr is at least as large as private member block.
+     * @warning Use with caution! Make sure that cArr is at least as large as private member block.
      * @param blockNr Number of the block to write to.
      * @param cArr Char-array to write to the block.
      * @return 1 on success, -1 on incorrect block number
