@@ -8,7 +8,7 @@ using namespace std;
 FileSystem::FileSystem() {
     root = new Directory("/");
 	mMemblockDevice = MemBlockDevice(250, 512);
-	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
+	format();
 }
 
 FileSystem::~FileSystem() {
@@ -189,7 +189,6 @@ void FileSystem::append(const std::string &source, const std::string &destinatio
 
 		if (sourceFile->getReadPermission() && destinationFile->getWritePermission()) {
 			string appendString = fileToString(source);
-			cout << appendString << " will be added." << endl;
 			appendToFile(destinationFile, appendString);
 		} else {
 			cout << "Files did not have proper read/write permission." << endl;
