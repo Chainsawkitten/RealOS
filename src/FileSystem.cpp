@@ -7,7 +7,7 @@ using namespace std;
 
 FileSystem::FileSystem() {
     root = new Directory("/");
-	mMemblockDevice = MemBlockDevice(4, 4);
+	mMemblockDevice = MemBlockDevice(250, 512);
 	freeBlockNumbers = vector<bool>(mMemblockDevice.size(), true);
 }
 
