@@ -66,8 +66,10 @@ void FileSystem::mkdir(const string &path) {
         return;
     }
     
-	if (fileOrDirectoryExists(path))
+    if (fileOrDirectoryExists(path)) {
+        cout << "File or directory with that name already exists." << endl;
 		return;
+    }
 
     directory->createDirectory(filePart(path));
     
@@ -222,6 +224,11 @@ void FileSystem::rename(const string &source, const string &newName) {
     }
     
     File* file = sourceDirectory->getFile(filePart(source));
+    if (!file->getWritePermission()) {
+        cout << "File is write protected." << endl;
+        return;
+    }
+    
     sourceDirectory->rm(filePart(source));
     file->rename(newName);
     destinationDirectory->addFile(file);
