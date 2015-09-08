@@ -37,7 +37,6 @@ public:
      * @param path Path to directory to create.
      */
     void mkdir(const std::string &path);
-      
     
     /// Prints the contents of a file.
     /**
@@ -76,13 +75,6 @@ public:
      * @param app Path to file to append to.
      */
     void append(const std::string &source, const std::string &app);
-    
-	/// Helper functions that helps the system to create files
-	/**
-	 * @param file file to append to.
-	 * @param contents contents to write to file.
-	 */
-	void appendToFile(File* file, std::string contents);
 
     /// Rename a file.
     /**
@@ -97,40 +89,46 @@ public:
      * @param file Path to the file to set permissions for.
      */
 	void chmod(const std::string &path, int permission);
-    
+
+	/// Checks whether a given directory exists.
+	/**
+	* @param path Path to the directory to check.
+	* @return Whether the directory exists
+	*/
+	bool directoryExists(const std::string &path);
+private:
+	/// Helper functions that helps the system to create files
+	/**
+	* @param file file to append to.
+	* @param contents contents to write to file.
+	*/
+	void appendToFile(File* file, std::string contents);
+
 	/// Finds unused blocknumbers in freeBlockNumbers
 	/**
-	 * @return a vector of unused blocknumbers
-	 */
+	* @return a vector of unused blocknumbers
+	*/
 	std::vector<int> freeBlocks() const;
 
 	/// Checks whether a file/directory exists or not
 	/**
-	 * @return wheter a file/directory exists or not.
-	 */
+	* @return wheter a file/directory exists or not.
+	*/
 	bool fileOrDirectoryExists(const std::string &path) const;
-    
+
 	/// Checks whether a file exists or not
 	/**
-	 * @return wheter a file exists or not.
-	 */
+	* @return wheter a file exists or not.
+	*/
 	bool fileExists(const std::string &path) const;
 
 	/// Puts a files content into a string
 	/**
-	 * @param path path to the file
-	 * @return file content
-	 */
+	* @param path path to the file
+	* @return file content
+	*/
 	std::string fileToString(const std::string &path) const;
 
-    /// Checks whether a given directory exists.
-    /**
-     * @param path Path to the directory to check.
-     * @return Whether the directory exists
-     */
-    bool directoryExists(const std::string &path);
-
-private:
     MemBlockDevice mMemblockDevice;
 	std::vector<bool> freeBlockNumbers;
     Directory* root;
