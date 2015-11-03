@@ -61,6 +61,7 @@ public:
     
 	/// Removes file listing
     /**
+     * @warning Only removes the file listing. The file object and the allocated blocks are not deleted. Use FileSystem::rm to completely remove a file.
      * @param name Name of the file to remove.
      */
 	void rm(const std::string &name);

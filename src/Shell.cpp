@@ -98,7 +98,14 @@ bool Shell::getCommand() {
             
 		case 15: // chmod
 			if (commandArr[2].length() != 0){
-				int perm = stoi(commandArr[2]);
+                int perm = 0;
+                try {
+                    perm = stoi(commandArr[2]);
+                } catch (invalid_argument) {
+                    cout << "Invalid argument." << endl;
+                    break;
+                }
+
 				fileSystem.chmod(absolutePath(commandArr[1]), perm);
 			} else {
 				cout << "Invalid amount of arguments." << endl;
