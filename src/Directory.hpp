@@ -56,8 +56,11 @@ public:
 	 */
 	File* getFile(const std::string &name);
     
-    /// Print the contents of the directory.
-    void ls() const;
+    /// Get the contents of the directory as a string.
+    /**
+     * @return Output
+     */
+    std::string ls() const;
     
 	/// Removes file listing
     /**
