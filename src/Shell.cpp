@@ -3,34 +3,32 @@
 #include <sstream>
 #include "FileSystem.hpp"
 
-using namespace std;
-
 const int MAXCOMMANDS = 8;
 const int NUMAVAILABLECOMMANDS = 16;
 
-string availableCommands[NUMAVAILABLECOMMANDS] = {
+std::string availableCommands[NUMAVAILABLECOMMANDS] = {
 	"quit", "format", "ls", "create", "cat", "save", "load",
 	"rm", "copy", "append", "rename", "mkdir", "cd", "pwd", "help", "chmod"
 };
 
-Shell::Shell(const string &user) {
+Shell::Shell(const std::string &user) {
 	this->user = user;
 	currentDir = "/";
 }
 
 bool Shell::getCommand() {
-	string userCommand, commandArr[MAXCOMMANDS];
+	std::string userCommand, commandArr[MAXCOMMANDS];
 
-	cout << user << ":" << currentDir << "$ ";
-	getline(cin, userCommand);
+	std::cout << user << ":" << currentDir << "$ ";
+	std::getline(std::cin, userCommand);
 	int nrOfCommands = parseCommandString(userCommand, commandArr);
 	if (nrOfCommands > 0) {
 		int cIndex = findCommand(commandArr[0]);
-		string fileContent;
+		std::string fileContent;
 		switch (cIndex) {
 
 		case 0: // quit
-			cout << "Exiting" << endl;
+			std::cout << "Exiting" << std::endl;
 			return false;
 			break;
 		case 1: // format
@@ -38,7 +36,7 @@ bool Shell::getCommand() {
             currentDir = "/";
 			break;
 		case 2: // ls
-			cout << "Listing directory" << endl;
+			std::cout << "Listing directory" << std::endl;
             
             if (nrOfCommands < 2)
                 fileSystem.ls(absolutePath(currentDir));
@@ -47,8 +45,8 @@ bool Shell::getCommand() {
 
 			break;
 		case 3: // create	
-			cout << "Enter file contents: \n";
-			getline(cin, fileContent);
+			std::cout << "Enter file contents: \n";
+			std::getline(std::cin, fileContent);
 			fileSystem.create(absolutePath(commandArr[1]), fileContent);
 			break;
 		case 4: // cat
@@ -86,16 +84,16 @@ bool Shell::getCommand() {
 				if (currentDir[currentDir.length() - 1] != '/')
 					currentDir += "/";
 			} else {
-                cout << "Directory does not exist." << endl;
+				std::cout << "Directory does not exist." << std::endl;
             }
 			break;
 
 		case 13: // pwd
-			cout << currentDir << endl;
+			std::cout << currentDir << std::endl;
 			break;
 
 		case 14: // help
-			cout << help() << endl;
+			std::cout << help() << std::endl;
 			break;
             
 		case 15: // chmod
@@ -103,27 +101,27 @@ bool Shell::getCommand() {
                 int perm = 0;
                 try {
                     perm = stoi(commandArr[2]);
-                } catch (invalid_argument) {
-                    cout << "Invalid argument." << endl;
+				}catch (std::invalid_argument) {
+					std::cout << "Invalid argument." << std::endl;
                     break;
                 }
 
 				fileSystem.chmod(absolutePath(commandArr[1]), perm);
 			} else {
-				cout << "Invalid amount of arguments." << endl;
+				std::cout << "Invalid amount of arguments." << std::endl;
             }
 			break;
 
 		default:
-			cout << "Unknown command: " << commandArr[0] << endl;
+			std::cout << "Unknown command: " << commandArr[0] << std::endl;
 		}
 	}
 
 	return true;
 }
 
-int Shell::parseCommandString(const string &userCommand, string strArr[]) {
-	stringstream ssin(userCommand);
+int Shell::parseCommandString(const std::string &userCommand, std::string strArr[]) {
+	std::stringstream ssin(userCommand);
 	int counter = 0;
 	while (ssin.good() && counter < MAXCOMMANDS) {
 		ssin >> strArr[counter];
@@ -135,7 +133,7 @@ int Shell::parseCommandString(const string &userCommand, string strArr[]) {
 	return counter;
 }
 
-int Shell::findCommand(string &command) {
+int Shell::findCommand(std::string &command) {
 	int index = -1;
 	for (int i = 0; i < NUMAVAILABLECOMMANDS && index == -1; ++i) {
 		if (command == availableCommands[i]) {
@@ -145,17 +143,17 @@ int Shell::findCommand(string &command) {
 	return index;
 }
 
-string Shell::absolutePath(string path) const {
+std::string Shell::absolutePath(std::string path) const {
 	// Fix relative path
 	if (path.length() == 0 || path[0] != '/')
 		path = currentDir + path;
 	path = path.substr(1);
     
-    vector<string> parts = split(path, '/');
-    vector<string> temp;
+	std::vector<std::string> parts = split(path, '/');
+	std::vector<std::string> temp;
     
     // Replace ./ and ../
-    for (string part : parts) {
+	for (std::string part : parts) {
         if (part == "..") {
             if (!temp.empty())
                 temp.pop_back();
@@ -174,8 +172,8 @@ string Shell::absolutePath(string path) const {
 	return path;
 }
 
-string Shell::help() {
-	string helpStr;
+std::string Shell::help() {
+	std::string helpStr;
 	helpStr += "OSD Disk Tool .oO Help Screen Oo.\n";
 	helpStr += "-----------------------------------------------------------------------------------\n";
 	helpStr += "* quit:                             Quit OSD Disk Tool\n";
@@ -197,10 +195,10 @@ string Shell::help() {
 	return helpStr;
 }
 
-vector<string> Shell::split(string text, char delimiter) {
-    vector<string> parts;
+std::vector<std::string> Shell::split(std::string text, char delimiter) {
+	std::vector<std::string> parts;
     
-    while (text.find(delimiter) != string::npos) {
+	while (text.find(delimiter) != std::string::npos) {
         size_t pos = text.find(delimiter);
         parts.push_back(text.substr(0, pos));
         text = text.substr(pos+1);
