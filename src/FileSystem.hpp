@@ -30,7 +30,7 @@ public:
     /**
      * @param filePath Path to the file to create.
      */
-    void create(const std::string &filePath);
+    void create(const std::string &filePath, const std::string &fileContent);
     
     /// Create a new directory.
     /**

@@ -32,14 +32,12 @@ void FileSystem::ls(const std::string &path) const {
     directory->ls();
 }
 
-void FileSystem::create(const std::string &filePath) {
+void FileSystem::create(const std::string &filePath, const std::string &fileContent) {
 	if (fileOrDirectoryExists(filePath)) {
 		cout << "File or directory already exists.";
 		return;
 	}
-	cout << "Enter file contents: \n";
-	string fileContent;
-	getline(cin, fileContent);
+
 
 	int requiredBlocks = ceil(fileContent.length() / (float)mMemblockDevice.getBlockLength());
 	vector<int> freeBlock = freeBlocks();
