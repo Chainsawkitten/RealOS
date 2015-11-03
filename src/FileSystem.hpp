@@ -23,26 +23,30 @@ public:
     /// Print the contents of a given directory.
     /**
      * @param path Path to the directory to print.
+     * @return Command output
      */
-    void ls(const std::string &path) const;
+    std::string ls(const std::string &path) const;
     
     /// Create a new file.
     /**
      * @param filePath Path to the file to create.
+     * @return Command output
      */
-    void create(const std::string &filePath, const std::string &fileContent);
+    std::string create(const std::string &filePath, const std::string &fileContent);
     
     /// Create a new directory.
     /**
      * @param path Path to directory to create.
+     * @return Command output
      */
-    void mkdir(const std::string &path);
+    std::string mkdir(const std::string &path);
     
     /// Prints the contents of a file.
     /**
      * @param fileName Path to the file to print.
+     * @return Command output
      */
-    void cat(const std::string &fileName) const;
+    std::string cat(const std::string &fileName) const;
     
     /// Save the file system to a file on the real hard drive.
     /**
@@ -59,36 +63,41 @@ public:
     /// Delete a file.
     /**
      * @param filePath Path to the file to delete.
+     * @return Command output
      */
-    void rm(const std::string &filePath);
+    std::string rm(const std::string &filePath);
     
     /// Copy a file.
     /**
      * @param source Path to the file to copy.
      * @param dest Path to the destination.
+     * @return Command output
      */
-    void copy(const std::string &source, const std::string &dest);
+    std::string copy(const std::string &source, const std::string &dest);
     
     /// Append the contents of one file to another.
     /**
      * @param source Path to source file.
      * @param app Path to file to append to.
+     * @return Command output
      */
-    void append(const std::string &source, const std::string &app);
+    std::string append(const std::string &source, const std::string &app);
 
     /// Rename a file.
     /**
      * @param source Old file path.
      * @param newName New file path.
+     * @return Command output
      */
-    void rename(const std::string &source, const std::string &newName);
+    std::string rename(const std::string &source, const std::string &newName);
     
     /// Change permissions.
     /**
      * @param path Path to the file to set permissions for.
      * @param permission Permission to set to.
+     * @return Command output
      */
-	void chmod(const std::string &path, int permission);
+	std::string chmod(const std::string &path, int permission);
 
 	/// Checks whether a given directory exists.
 	/**
@@ -106,8 +115,9 @@ private:
 	/**
 	 * @param file file to append to.
 	 * @param contents contents to write to file.
+	 * @return Command output
 	 */
-	void appendToFile(File* file, std::string contents);
+	std::string appendToFile(File* file, std::string contents);
 
 	/// Finds unused blocknumbers in freeBlockNumbers
 	/**

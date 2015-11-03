@@ -1,6 +1,5 @@
 #include "FileSystem.hpp"
 #include "File.hpp"
-#include <iostream>
 #include <cmath>
 
 
@@ -21,74 +20,59 @@ void FileSystem::format() {
     root = new Directory("/");
 }
 
-void FileSystem::ls(const std::string &path) const {
+std::string FileSystem::ls(const std::string &path) const {
     Directory* directory = root->getDirectory(path);
-    if (directory == nullptr) {
-        std::cout << "Directory does not exist." << std::endl;
-        return;
-    }
+    if (directory == nullptr)
+        return "Directory does not exist.\n";
     
-    directory->ls();
+    return directory->ls();
 }
 
-void FileSystem::create(const std::string &filePath, const std::string &fileContent) {
-	if (fileOrDirectoryExists(filePath)) {
-		std::cout << "File or directory already exists.";
-		return;
-	}
+std::string FileSystem::create(const std::string &filePath, const std::string &fileContent) {
+	if (fileOrDirectoryExists(filePath))
+		return "File or directory already exists.\n";
 
 
 	int requiredBlocks = ceil(fileContent.length() / (float)mMemblockDevice.getBlockLength());
 	std::vector<int> freeBlock = freeBlocks();
-	if (requiredBlocks > freeBlock.size()) {
-		std::cout << "Not enough free blocks to save string." << std::endl;
-		return;
-	}
+	if (requiredBlocks > freeBlock.size())
+		return "Not enough free blocks to save string.\n";
 
     Directory* directory = root->getDirectory(directoryPart(filePath));
 	File* file = directory->createFile(filePart(filePath));
 
-	appendToFile(file, fileContent);
+	return appendToFile(file, fileContent);
 }
 
-void FileSystem::mkdir(const std::string &path) {
-    if (filePart(path).empty()) {
-        std::cout << "Wrong syntax." << std::endl;
-        return;
-    }
+std::string FileSystem::mkdir(const std::string &path) {
+    if (filePart(path).empty())
+        return "Wrong syntax.\n";
     
     Directory* directory = root->getDirectory(directoryPart(path));
-    if (directory == nullptr) {
-        std::cout << "Directory " << directoryPart(path) << " does not exist." << std::endl;
-        return;
-    }
+    if (directory == nullptr)
+        return "Directory " + directoryPart(path) + " does not exist.\n";
     
-    if (fileOrDirectoryExists(path)) {
-        std::cout << "File or directory with that name already exists." << std::endl;
-		return;
-    }
+    if (fileOrDirectoryExists(path))
+        return "File or directory with that name already exists.\n";
 
     directory->createDirectory(filePart(path));
     
-    std::cout << "Directory created." << std::endl;
+    return "Directory created.\n";
 }
 
-void FileSystem::cat(const std::string &fileName) const {
+std::string FileSystem::cat(const std::string &fileName) const {
     Directory* directory = root->getDirectory(directoryPart(fileName));
-    if (directory == nullptr) {
-        std::cout << "File does not exist." << std::endl;
-        return;
-    }
+    if (directory == nullptr)
+        return "File does not exist.\n";
+    
     File* file = directory->getFile(filePart(fileName));
 	if (file == nullptr) {
-        std::cout << "File does not exist." << std::endl;
-        return;
+        return "File does not exist.\n";
 	} else if (!file->getReadPermission()) {
-		std::cout << "File is read protected." << std::endl;
-		return;
+		return "File is read protected.\n";
 	}
     
-    std::cout << fileToString(fileName) << std::endl;
+    return fileToString(fileName) + "\n";
 }
 
 void FileSystem::save(const std::string &saveFile) const {
@@ -133,51 +117,47 @@ void FileSystem::load(const std::string &saveFile) {
 	file.close();
 }
 
-void FileSystem::rm(const std::string &path) {
+std::string FileSystem::rm(const std::string &path) {
 	if (!fileExists(path))
-		return;
+		return "File does not exist.\n";
+    
 	Directory* directory = root->getDirectory(directoryPart(path));
 	File* file = directory->getFile(filePart(path));
 
-	if (!file->getWritePermission()) {
-		std::cout << "File is write protected." << std::endl;
-		return;
-	}
+	if (!file->getWritePermission())
+		return "File is write protected.\n";
 
 	for (int i = 0; i < file->getBlockNumbers().size(); i++)
 		freeBlockNumbers[file->getBlockNumbers()[i]] = true;
 	
 	delete file;
 	directory->rm(filePart(path));
+    
+    return "";
 }
 
-void FileSystem::copy(const std::string &source, const std::string &dest) {
-	if (!fileExists(source)) {
-		std::cout << "Can't copy file, file does not exist." << std::endl;
-		return;
-	}
-	if (fileOrDirectoryExists(dest)) {
-		std::cout << "Can't copy file, destination already exists." << std::endl;
-	}
+std::string FileSystem::copy(const std::string &source, const std::string &dest) {
+	if (!fileExists(source))
+		return "Can't copy file, file does not exist.\n";
+	
+	if (fileOrDirectoryExists(dest))
+		return "Can't copy file, destination already exists.\n";
+	
 	Directory* directory = root->getDirectory(directoryPart(source));
 	File* sourceFile = directory->getFile(filePart(source));
-    if (!sourceFile->getReadPermission()) {
-		std::cout << "File is read protected." << std::endl;
-        return;
-    }
+    if (!sourceFile->getReadPermission())
+		return "File is read protected.\n";
     
     Directory* destinationDirectory = root->getDirectory(directoryPart(dest));
-    if (destinationDirectory == nullptr) {
-        std::cout << "Destination directory does not exist." << std::endl;
-        return;
-    }
+    if (destinationDirectory == nullptr)
+        return "Destination directory does not exist.\n";
     
 	File* destinationFile = destinationDirectory->createFile(filePart(dest));
 	std::string contents = fileToString(source);
-	appendToFile(destinationFile, contents);
+	return appendToFile(destinationFile, contents);
 }
 
-void FileSystem::append(const std::string &source, const std::string &destination) {
+std::string FileSystem::append(const std::string &source, const std::string &destination) {
 	if (fileExists(destination) && fileExists(source)) {
 		Directory* destinationDirectory = root->getDirectory(directoryPart(destination));
 		Directory* sourceDirectory = root->getDirectory(directoryPart(source));
@@ -186,73 +166,61 @@ void FileSystem::append(const std::string &source, const std::string &destinatio
 
 		if (sourceFile->getReadPermission() && destinationFile->getWritePermission()) {
 			std::string appendstring = fileToString(source);
-			appendToFile(destinationFile, appendstring);
+			return appendToFile(destinationFile, appendstring);
 		} else {
-			std::cout << "Files did not have proper read/write permission." << std::endl;
+			return "Files did not have proper read/write permission.\n";
 		}
-	} else {
-		std::cout << "File(s) were not found." << std::endl;
 	}
+	
+    return "File(s) were not found.\n";
 }
 
-void FileSystem::rename(const std::string &source, const std::string &newName) {
-    if (newName.empty()) {
-        std::cout << "New name can't be empty." << std::endl;
-        return;
-    }
+std::string FileSystem::rename(const std::string &source, const std::string &newName) {
+    if (newName.empty())
+        return "New name can't be empty.\n";
     
-    if (!fileExists(source)) {
-        std::cout << "Can't rename file, source does not exist." << std::endl;
-        return;
-    }
+    if (!fileExists(source))
+        return "Can't rename file, source does not exist.\n";
     
-    if (fileOrDirectoryExists(newName)) {
-        std::cout << "Destination already exists." << std::endl;
-        return;
-    }
+    if (fileOrDirectoryExists(newName))
+        return "Destination already exists.\n";
     
     Directory* sourceDirectory = root->getDirectory(directoryPart(source));
     Directory* destinationDirectory = root->getDirectory(directoryPart(newName));
     
-    if (destinationDirectory == nullptr) {
-        std::cout << "Destination directory does not exist." << std::endl;
-        return;
-    }
+    if (destinationDirectory == nullptr)
+        return "Destination directory does not exist.\n";
     
     File* file = sourceDirectory->getFile(filePart(source));
-    if (!file->getWritePermission()) {
-        std::cout << "File is write protected." << std::endl;
-        return;
-    }
+    if (!file->getWritePermission())
+        return "File is write protected.\n";
     
     sourceDirectory->rm(filePart(source));
     file->rename(newName);
     destinationDirectory->addFile(file);
+    
+    return "";
 }
 
-void FileSystem::chmod(const std::string &path, int permission) {
+std::string FileSystem::chmod(const std::string &path, int permission) {
 	Directory* directory = root->getDirectory(directoryPart(path));
-    if (directory == nullptr) {
-        std::cout << "File does not exist." << std::endl;
-        return;
-    }
+    if (directory == nullptr)
+        return "File does not exist.\n";
     
 	File* file = directory->getFile(filePart(path));
-    if (file == nullptr) {
-        std::cout << "File does not exist." << std::endl;
-        return;
-    }
+    if (file == nullptr)
+        return "File does not exist.\n";
     
-	if (permission > 4 || permission < 0){
-		std::cout << "Invalid permission level. Valid permission levels:\n";
-		std::cout << "0 = NONE.\n";
-		std::cout << "1 = READ only.\n";
-		std::cout << "2 = WRITE only.\n";
-		std::cout << "3 = READ and WRITE permission.\n";
-        return;
-	}
+	if (permission > 3 || permission < 0)
+		return "Invalid permission level. Valid permission levels:\n"
+               "0 = NONE.\n"
+               "1 = READ only.\n"
+               "2 = WRITE only.\n"
+               "3 = READ and WRITE permission.\n";
     
 	file->setPermission(File::Permission(permission));
+    
+    return "";
 }
 
 bool FileSystem::directoryExists(const std::string &path) {
@@ -278,7 +246,7 @@ std::string FileSystem::fileToString(const std::string &path) const {
 	return contents;
 }
 
-void FileSystem::appendToFile(File* file, std::string contents) {
+std::string FileSystem::appendToFile(File* file, std::string contents) {
 	std::vector<int> freeBlock = freeBlocks();
 	std::vector<int> usedBlockNumbers;
 	int bufferPos = 0;												// Keeps track of where we are in the buffer
@@ -292,14 +260,16 @@ void FileSystem::appendToFile(File* file, std::string contents) {
 		int tempLength = file->getLength() + contents.length();
 		//Calculate how many new blocks we need, if any.
 		requiredBlocks = ceil(tempLength / (float)mMemblockDevice.getBlockLength()) - file->getBlockNumbers().size();
-		if (requiredBlocks > freeBlock.size()) {
-			std::cout << "Not enough free blocks.\n";
-			return;
-		}
+        
+		if (requiredBlocks > freeBlock.size())
+			return "Not enough free blocks.\n";
+		
 		file->setLength(tempLength);
+        
 		// Null out buffer.
 		for (int i = 0; i < mMemblockDevice.getBlockLength(); i++)
 			buffer[i] = '\0';
+        
 		// Read the last block of the file into the buffer.
 		char c;
 		while ((bufferPos < ((float)mMemblockDevice.getBlockLength())) && ((c = mMemblockDevice.readBlock(file->getBlockNumbers().back())[bufferPos]) != '\0')) {
@@ -308,6 +278,7 @@ void FileSystem::appendToFile(File* file, std::string contents) {
 		}
 		usedBlockNumbers = file->getBlockNumbers();
 		usedBlockNumbers.pop_back();
+        
 		// Insert the files last block number at the start of freeBlock,
 		// indicating that if we need a new block then we should write the buffer
 		// to the files last block.
@@ -349,6 +320,8 @@ void FileSystem::appendToFile(File* file, std::string contents) {
     delete[] buffer;
 	freeBlocks();
 	file->setBlockNumbers(usedBlockNumbers);
+    
+    return "";
 }
 
 std::vector<int> FileSystem::freeBlocks() const{
@@ -362,15 +335,12 @@ std::vector<int> FileSystem::freeBlocks() const{
 
 bool FileSystem::fileOrDirectoryExists(const std::string &path) const {
 	Directory* directory = root->getDirectory(directoryPart(path));
-	if (directory->getDirectory(filePart(path)) != nullptr) {
-		std::cout << "Directory with that name already exists." << std::endl;
+	if (directory->getDirectory(filePart(path)) != nullptr)
 		return true;
-	}
 
-	if (directory->getFile(filePart(path)) != nullptr) {
-		std::cout << "File with same name already exists." << std::endl;
+	if (directory->getFile(filePart(path)) != nullptr)
 		return true;
-	}
+    
 	return false;
 }
 

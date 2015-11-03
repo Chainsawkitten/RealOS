@@ -63,14 +63,17 @@ File* Directory::getFile(const string &name) {
 	return nullptr;
 }
 
-void Directory::ls() const {
+std::string Directory::ls() const {
+    std::string output = "";
     for (auto directory : directories) {
-        cout << directory.second->toString();
+        output += directory.second->toString();
     }
     
     for (auto file : files) {
-        cout << file.second->toString();
+        output += file.second->toString();
     }
+    
+    return output;
 }
 
 void Directory::rm(const string &name){
