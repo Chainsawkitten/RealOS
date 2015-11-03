@@ -23,10 +23,10 @@ bool Shell::getCommand() {
 
 	cout << user << ":" << currentDir << "$ ";
 	getline(cin, userCommand);
-
 	int nrOfCommands = parseCommandString(userCommand, commandArr);
 	if (nrOfCommands > 0) {
 		int cIndex = findCommand(commandArr[0]);
+		string fileContent;
 		switch (cIndex) {
 
 		case 0: // quit
@@ -46,8 +46,10 @@ bool Shell::getCommand() {
                 fileSystem.ls(absolutePath(commandArr[1]));
 
 			break;
-		case 3: // create
-			fileSystem.create(absolutePath(commandArr[1]));
+		case 3: // create	
+			cout << "Enter file contents: \n";
+			getline(cin, fileContent);
+			fileSystem.create(absolutePath(commandArr[1]), fileContent);
 			break;
 		case 4: // cat
 			fileSystem.cat(absolutePath(commandArr[1]));
